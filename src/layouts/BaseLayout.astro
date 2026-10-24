@@ -1,0 +1,119 @@
+---
+import '../styles/global.css';
+import { url } from '../lib/gallery';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** OGP 用の画像 URL */
+  image?: string;
+  /** 記事ページなど、一覧以外で使うときの type */
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  /** 先読みしておきたい画像 URL（LCP 候補） */
+  preloadImage?: string;
+}
+
+const {
+  title,
+  description,
+  image,
+  type = 'website',
+  noindex = false,
+  preloadImage,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+const ogImage = image ? new URL(image, Astro.site ?? Astro.url).href : undefined;
+const siteName = 'Image Gallery Samples';
+const year = new Date().getFullYear();
+
+const navItems = [
+  { href: url('/'), label: 'Gallery' },
+  { href: url('/tags/'), label: 'Tags' },
+  { href: url('/about/'), label: 'About' },
+];
+
+const pathname = Astro.url.pathname;
+const isCurrent = (href: string) =>
+  href === url('/') ? pathname === href : pathname.startsWith(href);
+---
+
+<!doctype html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={siteName} href={url('/rss.xml')} />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    <meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- 画像 CDN へ先に接続しておく（画像の表示開始が早くなる） -->
+    <link rel="preconnect" href="https://picsum.photos" />
+    <link rel="preconnect" href="https://fastly.picsum.photos" crossorigin />
+    {
+      preloadImage && (
+        <link
+          rel="preload"
+          as="image"
+          href={preloadImage}
+          fetchpriority="high"
+        />
+      )
+    }
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta name="twitter:card" content="summary_large_image" />}
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    <link rel="alternate icon" href={url('/favicon.ico')} sizes="32x32" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へスキップ</a>
+
+    <header class="site-header">
+      <div class="wrap site-header__inner">
+        <a class="brand" href={url('/')}>
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span>Image Gallery</span>
+          <span class="brand__sub">Samples</span>
+        </a>
+        <nav class="site-nav" aria-label="メインナビゲーション">
+          {
+            navItems.map((item) => (
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap site-footer__inner">
+        <p>© {year} {siteName}</p>
+        <p>
+          写真は <a href="https://picsum.photos/" rel="noopener">Lorem Picsum</a> /
+          <a href="https://unsplash.com/" rel="noopener">Unsplash</a> の提供です。
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

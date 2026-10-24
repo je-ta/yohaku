@@ -1,0 +1,190 @@
+---
+import { aspectRatio, coverImage, formatDate, isoDate, imageSrcSet, imageUrl, postUrl, thumbUrl } from '../lib/gallery';
+import type { GalleryImage } from '../lib/gallery';
+
+interface Props {
+  id: string;
+  title: string;
+  date: Date;
+  category: string;
+  description?: string;
+  images: GalleryImage[];
+  cover?: string;
+  /** 一覧の先頭だけ大きく見せる */
+  featured?: boolean;
+}
+
+const {
+  id,
+  title,
+  date,
+  category,
+  description = '',
+  images,
+  cover,
+  featured = false,
+} = Astro.props;
+
+const photo = coverImage(images, cover);
+const href = postUrl(id);
+---
+
+<article class:list={['post-card', { 'post-card--featured': featured }]}>
+  <a class="post-card__link" href={href}>
+    <figure
+      class="post-card__figure"
+      style={`--ph: ${photo.color}; aspect-ratio: ${featured ? '16 / 9' : aspectRatio(photo)}`}
+    >
+      <img
+        src={featured ? imageUrl(photo, 640) : thumbUrl(photo)}
+        srcset={imageSrcSet(photo)}
+        sizes={featured ? '(min-width: 900px) 760px, 100vw' : '(min-width: 900px) 380px, 50vw'}
+        width={featured ? 640 : Math.min(...photo.widths)}
+        height={
+          featured
+            ? Math.round((640 * photo.h) / photo.w)
+            : Math.round((Math.min(...photo.widths) * photo.h) / photo.w)
+        }
+        alt={photo.alt}
+        loading={featured ? 'eager' : 'lazy'}
+        fetchpriority={featured ? 'high' : 'auto'}
+        decoding="async"
+      />
+      <span class="post-card__count" aria-hidden="true">
+        {images.length}
+        <span class="visually-hidden">枚の写真</span>
+      </span>
+    </figure>
+
+    <div class="post-card__body">
+      <p class="post-card__meta">
+        <span class="post-card__category">{category}</span>
+        <time datetime={isoDate(date)}>{formatDate(date)}</time>
+      </p>
+      <h3 class="post-card__title">{title}</h3>
+      {description && <p class="post-card__desc">{description}</p>}
+    </div>
+  </a>
+</article>
+
+<style>
+  .post-card {
+    min-width: 0;
+  }
+
+  .post-card__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .post-card__figure {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--ph, var(--bg-sunken));
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.35s var(--ease), transform 0.35s var(--ease);
+  }
+
+  .post-card__figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease), opacity 0.4s var(--ease);
+  }
+
+  .post-card__link:hover .post-card__figure {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .post-card__link:hover .post-card__figure img {
+    transform: scale(1.025);
+  }
+
+  .post-card__count {
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.12rem 0.5rem;
+    border-radius: 999px;
+    background: rgb(0 0 0 / 0.55);
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    backdrop-filter: blur(6px);
+  }
+
+  .post-card__count::before {
+    content: '▦';
+    font-size: 0.7em;
+    opacity: 0.8;
+  }
+
+  .post-card__body {
+    padding-top: 0.85rem;
+  }
+
+  .post-card__meta {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 0 0 0.35rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+  }
+
+  .post-card__category {
+    padding: 0.1rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+  }
+
+  .post-card__title {
+    font-size: 1.05rem;
+    letter-spacing: 0.03em;
+    transition: color 0.25s var(--ease);
+  }
+
+  .post-card__link:hover .post-card__title {
+    color: var(--accent);
+  }
+
+  .post-card__desc {
+    margin: 0.4rem 0 0;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-card--featured .post-card__figure {
+    border-radius: var(--radius-lg);
+  }
+
+  .post-card--featured .post-card__title {
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.65rem);
+  }
+
+  .post-card--featured .post-card__desc {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    font-size: 0.88rem;
+  }
+</style>

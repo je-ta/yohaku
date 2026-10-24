@@ -1,0 +1,98 @@
+---
+import { aspectRatio, imageSrcSet, imageUrl } from '../lib/gallery';
+import type { GalleryImage } from '../lib/gallery';
+
+interface Props {
+  image: GalleryImage;
+  /** この記事内での並び順（1 始まり）。キャプション表示に使う。 */
+  index: number;
+  total: number;
+  /** 最初の 1 枚は遅延読み込みしない（LCP 対策） */
+  priority?: boolean;
+}
+
+const { image, index, total, priority = false } = Astro.props;
+const num = String(index).padStart(2, '0');
+const paddedTotal = String(total).padStart(2, '0');
+---
+
+<figure class="gallery-item" id={`photo-${image.id}`}>
+  <div class="gallery-item__frame" style={`--ph: ${image.color}; aspect-ratio: ${aspectRatio(image)}`}>
+    <img
+      src={imageUrl(image, 1280)}
+      srcset={imageSrcSet(image)}
+      sizes="(min-width: 1100px) 860px, (min-width: 640px) 92vw, 100vw"
+      width="1280"
+      height={Math.round((1280 * image.h) / image.w)}
+      alt={image.alt}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : 'auto'}
+      decoding="async"
+    />
+  </div>
+  <figcaption class="gallery-item__caption">
+    <span class="gallery-item__index" aria-hidden="true">{num}<span class="gallery-item__total">/{paddedTotal}</span></span>
+    {image.caption && <span class="gallery-item__credit">{image.caption}</span>}
+    <a class="gallery-item__anchor" href={`#photo-${image.id}`} aria-label={`写真 ${index} へのリンク`}>#</a>
+  </figcaption>
+</figure>
+
+<style>
+  .gallery-item {
+    margin: 0;
+    scroll-margin-top: 6rem;
+  }
+
+  .gallery-item__frame {
+    background: var(--ph, var(--bg-sunken));
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .gallery-item__frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gallery-item__caption {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    margin-top: 0.5rem;
+    padding-inline: 0.15rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+  }
+
+  .gallery-item__index {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+  }
+
+  .gallery-item__total {
+    opacity: 0.5;
+  }
+
+  .gallery-item__credit {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .gallery-item__anchor {
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.2s var(--ease);
+  }
+
+  .gallery-item:hover .gallery-item__anchor,
+  .gallery-item__anchor:focus-visible {
+    opacity: 1;
+  }
+</style>

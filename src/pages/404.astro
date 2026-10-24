@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { postUrl } from '../lib/gallery';
+
+const posts = (await getCollection('posts')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<BaseLayout title="404 — Image Gallery Samples" noindex>
+  <section class="notfound wrap">
+    <p class="eyebrow">404</p>
+    <h1 class="notfound__title">ページが見つかりません</h1>
+    <p class="notfound__lead">
+      リンクが変わったか、削除された可能性があります。下の記事から辿ってみてください。
+    </p>
+    <ul class="notfound__links">
+      {
+        posts.slice(0, 4).map((post) => (
+          <li>
+            <a href={postUrl(post.id)}>{post.data.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+    <a class="btn btn--primary" href="/">ギャラリー一覧へ</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    padding-block: clamp(3rem, 10vw, 7rem);
+    max-width: 640px;
+  }
+
+  .notfound__title {
+    font-size: clamp(1.5rem, 1.1rem + 2vw, 2.2rem);
+    margin-top: 0.8rem;
+  }
+
+  .notfound__lead {
+    color: var(--text-muted);
+    margin: 1rem 0 0;
+  }
+
+  .notfound__links {
+    list-style: none;
+    margin: 2rem 0;
+    padding: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .notfound__links li {
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .notfound__links a {
+    text-decoration: none;
+    font-family: var(--font-serif);
+  }
+</style>

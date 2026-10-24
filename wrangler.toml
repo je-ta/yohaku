@@ -1,0 +1,9 @@
+# Cloudflare Workers の静的アセット配信。
+# wrangler 4.15x 以降、Pages は Workers に統合されたのでこちらの形式を使う。
+name = "image-gallery-samples"
+compatibility_date = "2026-10-24"
+
+[assets]
+directory = "./dist"
+# 存在しないパスは 404.html を返す
+not_found_handling = "404-page"

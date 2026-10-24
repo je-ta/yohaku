@@ -1,0 +1,249 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GalleryImage from '../../components/GalleryImage.astro';
+import { coverImage, formatDate, imageUrl, isoDate, postUrl, tagLabel, url } from '../../lib/gallery';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { title, date, category, tags, description, images, cover } = post.data;
+const { Content } = await render(post);
+
+const sorted = [...images];
+const coverPhoto = coverImage(images, cover);
+const others = (await getCollection('posts')).filter((p) => p.id !== post.id);
+const related = others
+  .map((p) => ({
+    post: p,
+    score: p.data.images.filter((img) => images.some((mine) => mine.id === img.id)).length,
+  }))
+  .filter(({ score }) => score > 0)
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3);
+
+const pageTitle = `${title} — Image Gallery Samples`;
+
+// 最初の写真だけは body の描画前から取りに行かせる（LCP が早くなる）
+const heroImage = sorted[0];
+const heroPreload = new URL(imageUrl(heroImage, 1280), Astro.site ?? Astro.url).href;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={description || `${title}のサンプルギャラリー。`}
+  image={imageUrl(coverPhoto, 1280)}
+  type="article"
+  preloadImage={heroPreload}
+>
+  <article class="post">
+    <header class="post__header wrap wrap--narrow">
+      <nav class="post__back" aria-label="パンくず">
+        <a href={url('/')}>← Gallery</a>
+      </nav>
+
+      <p class="post__meta">
+        <a class="post__category" href={url(`/tags/#${category}`)}>{category}</a>
+        <time datetime={isoDate(date)}>{formatDate(date)}</time>
+        <span>{images.length} photos</span>
+      </p>
+
+      <h1 class="post__title">{title}</h1>
+      {description && <p class="post__lead">{description}</p>}
+
+      {
+        tags.length > 0 && (
+          <ul class="chip-row post__tags">
+            {tags.map((tag) => (
+              <li>
+                <a class="chip" href={url(`/tags/#${tag}`)}>
+                  {tagLabel(tag)}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    <div class="post__body wrap wrap--narrow prose">
+      <Content />
+    </div>
+
+    <div class="post__gallery wrap wrap--narrow">
+      {
+        sorted.map((image, i) => (
+          <GalleryImage image={image} index={i + 1} total={sorted.length} priority={i === 0} />
+        ))
+      }
+    </div>
+
+    <footer class="post__footer wrap wrap--narrow">
+      <p class="post__count">{images.length} 枚の写真を掲載しています。</p>
+      <a class="btn" href={url('/')}>ギャラリー一覧へ戻る</a>
+    </footer>
+
+    {
+      related.length > 0 && (
+        <aside class="post__related wrap wrap--narrow" aria-labelledby="related-heading">
+          <h2 id="related-heading" class="post__related-title">
+            同じ写真を含む記事
+          </h2>
+          <ul class="post__related-list">
+            {related.map(({ post: p }) => (
+              <li>
+                <a href={postUrl(p.id)}>{p.data.title}</a>
+                <span>{p.data.images.length} photos</span>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )
+    }
+  </article>
+</BaseLayout>
+
+<style>
+  .post__header {
+    padding-block: clamp(2rem, 6vw, 3.5rem) clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .post__back {
+    margin-bottom: 1.6rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+  }
+
+  .post__back a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .post__back a:hover {
+    color: var(--accent);
+  }
+
+  .post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.85rem;
+    margin: 0 0 0.9rem;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+  }
+
+  .post__category {
+    padding: 0.12rem 0.6rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+  }
+
+  .post__category:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .post__title {
+    font-size: clamp(1.6rem, 1.15rem + 2vw, 2.5rem);
+    letter-spacing: 0.04em;
+  }
+
+  .post__lead {
+    margin: 1rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+
+  .post__tags {
+    margin-top: 1.4rem;
+  }
+
+  .post__body {
+    padding-block: clamp(1.5rem, 4vw, 2.5rem) clamp(2rem, 5vw, 3rem);
+    border-top: 1px solid var(--border);
+  }
+
+  .post__body :global(> *:first-child) {
+    margin-top: 0;
+  }
+
+  .post__gallery {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 2.75rem);
+    max-width: 900px;
+  }
+
+  .post__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .post__count {
+    margin: 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+  }
+
+  .post__related {
+    max-width: 900px;
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .post__related-title {
+    font-size: 0.82rem;
+    font-family: var(--font-sans);
+    letter-spacing: 0.12em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post__related-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .post__related-list li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post__related-list a {
+    text-decoration: none;
+    font-family: var(--font-serif);
+    letter-spacing: 0.03em;
+  }
+
+  .post__related-list span {
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+</style>

@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { imageUrl, url } from '../lib/gallery';
+
+const posts = (await getCollection('posts')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const featured = posts[0];
+const rest = posts.slice(1);
+const totalPhotos = posts.reduce((sum, post) => sum + post.data.images.length, 0);
+
+const categories = [...new Set(posts.map((post) => post.data.category))].sort();
+---
+
+<BaseLayout
+  title="Image Gallery Samples — 写真で見るサンプルギャラリー"
+  description="複数画像のレイアウトと読み込みを確認するためのサンプルギャラリー。写真は Lorem Picsum / Unsplash の提供です。"
+  image={featured ? imageUrl(featured.data.images[0], 1280) : undefined}
+>
+  <section class="hero wrap">
+    <p class="eyebrow">Sample Gallery</p>
+    <h1 class="hero__title">写真を、ゆっくり見る。</h1>
+    <p class="hero__lead">
+      複数画像の並び方と読み込みを確かめるためのサンプル集。{posts.length} 本の記事に{totalPhotos} 枚の写真を収めています。
+    </p>
+    <ul class="hero__stats">
+      <li><strong>{posts.length}</strong><span>記事</span></li>
+      <li><strong>{totalPhotos}</strong><span>写真</span></li>
+      <li><strong>{categories.length}</strong><span>カテゴリ</span></li>
+    </ul>
+  </section>
+
+  <section class="wrap section" aria-labelledby="latest-heading">
+    <div class="section__head">
+      <h2 id="latest-heading" class="section__title">最新のギャラリー</h2>
+      <a class="section__more" href={url('/tags/')}>タグから探す →</a>
+    </div>
+
+    {
+      featured && (
+        <div class="featured">
+          <PostCard
+            id={featured.id}
+            title={featured.data.title}
+            date={featured.data.date}
+            category={featured.data.category}
+            description={featured.data.description}
+            images={featured.data.images}
+            cover={featured.data.cover}
+            featured
+          />
+        </div>
+      )
+    }
+
+    <div class="grid">
+      {
+        rest.map((post) => (
+          <PostCard
+            id={post.id}
+            title={post.data.title}
+            date={post.data.date}
+            category={post.data.category}
+            description={post.data.description}
+            images={post.data.images}
+            cover={post.data.cover}
+          />
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: clamp(2.5rem, 8vw, 5.5rem) clamp(1.5rem, 4vw, 2.5rem);
+    max-width: var(--page-max);
+  }
+
+  .hero__title {
+    font-size: clamp(1.9rem, 1.2rem + 3.2vw, 3.4rem);
+    letter-spacing: 0.06em;
+    margin-top: 0.9rem;
+  }
+
+  .hero__lead {
+    max-width: 46ch;
+    margin: 1.1rem 0 0;
+    color: var(--text-muted);
+    font-size: clamp(0.9rem, 0.85rem + 0.25vw, 1rem);
+  }
+
+  .hero__stats {
+    display: flex;
+    gap: clamp(1.4rem, 5vw, 3rem);
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+  }
+
+  .hero__stats li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  .hero__stats strong {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hero__stats span {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+  }
+
+  .section {
+    padding-bottom: 1rem;
+  }
+
+  .section__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.85rem;
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section__title {
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+  }
+
+  .section__more {
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .section__more:hover {
+    color: var(--accent);
+  }
+
+  .featured {
+    margin-bottom: clamp(2rem, 5vw, 3.25rem);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: clamp(1.4rem, 3vw, 2.25rem) clamp(1rem, 2.5vw, 1.6rem);
+  }
+</style>
