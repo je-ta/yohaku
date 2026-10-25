@@ -20,6 +20,38 @@ images:
     widths: [320, 640, 860]
     color: "#ceb8c7"
     alt: ベッドで恥じらいながら顔を隠すホシノ、MOSS-Image生成
+  - id: 7f27f6b9e838002d
+    photoId: "7f27f6b9e838002d"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#d2bfcc"
+    alt: ベッドで脚を開き顔を隠すホシノ、1枚目
+  - id: 4f3fb80105d88478
+    photoId: "4f3fb80105d88478"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#d6c1ce"
+    alt: ベッドで脚を開き顔を隠すホシノ、2枚目
+  - id: d0eb09b4d3c99347
+    photoId: "d0eb09b4d3c99347"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#c7bbc8"
+    alt: ベッドで脚を開き顔を隠すホシノ、3枚目
+  - id: c2d2a611a95c19da
+    photoId: "c2d2a611a95c19da"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#c8b3b7"
+    alt: 朝の光の中、見上げるホシノ
 ---
 
 速度優先だと 19秒で1枚出る。品質を優先したらどこまで上がるのか、ホシノで試した。
@@ -127,3 +159,15 @@ bad proportions, misspelled text
 | 25step 蒸留なし + cfg3.0 | 266秒 | 陰影・質感・小物の密度が上がる |
 
 Q8 は 8GB では 1024px で回せない。量子化を上げるより、step と cfg を上げた方が効く。
+
+## ホシノ 30枚
+
+10パターン × 3seed。生成のたびにここへ追加していく。
+
+![ベッド・顔を隠す 1](photo:7f27f6b9e838002d)
+
+![ベッド・顔を隠す 2](photo:4f3fb80105d88478)
+
+![ベッド・顔を隠す 3](photo:d0eb09b4d3c99347)
+
+![朝の光・見上げる 1](photo:c2d2a611a95c19da)
