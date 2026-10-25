@@ -69,7 +69,7 @@ images:
       - 1280
     color: "#888888"
     alt: 写真の内容を書く
-    caption: "Photo: 撮影者名 / Unsplash"
+    caption: "Photo: 撮影者名"
 ---
 
 本文をここに書く。

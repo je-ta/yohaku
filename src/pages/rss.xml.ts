@@ -9,8 +9,8 @@ export async function GET(context: APIContext) {
   );
 
   return rss({
-    title: '余白',
-    description: '写真で見るサンプルギャラリー。',
+    title: 'log',
+    description: '写真と文章の記録。',
     site: context.site ?? context.url.origin,
     items: posts.map((post) => ({
       title: post.data.title,

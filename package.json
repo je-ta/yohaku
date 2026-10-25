@@ -17,7 +17,11 @@
     "new-post": "node scripts/new-post.mjs",
     "images": "node scripts/fetch-images.mjs",
     "add-photos": "node scripts/add-photos.mjs",
-    "assets": "node scripts/render-assets.mjs"
+    "assets": "node scripts/render-assets.mjs",
+    "worker": "wrangler dev",
+    "db:schema": "wrangler d1 execute yohaku-analytics --remote --file=worker/schema.sql",
+    "db:local": "wrangler d1 execute yohaku-analytics --local --file=worker/schema.sql",
+    "deploy": "bun run build && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
@@ -26,8 +30,9 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "@cloudflare/workers-types": "^5.20261025.1",
+    "sharp": "^0.35.5",
     "typescript": "^5.9.3",
-    "wrangler": "^4.152.0",
-    "sharp": "^0.35.5"
+    "wrangler": "^4.152.0"
   }
 }

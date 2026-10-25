@@ -109,9 +109,9 @@ for (const file of files) {
 
 if (blocks.length === 0) process.exit(1);
 
-await writeFile('/tmp/yohaku-images.txt', `images:\n${blocks.join('\n')}\n`, 'utf8');
+await writeFile('/tmp/log-images.txt', `images:\n${blocks.join('\n')}\n`, 'utf8');
 
 console.log(`\n${blocks.length} 枚を書き出しました（${(totalBytes / 1024 / 1024).toFixed(2)} MB）`);
 console.log('--- 以下を記事の frontmatter に貼り付けてください ---\n');
 console.log(`images:\n${blocks.join('\n')}`);
-console.log('\n（同じ内容を /tmp/yohaku-images.txt にも保存しました）');
+console.log('\n（同じ内容を /tmp/log-images.txt にも保存しました）');

@@ -1,6 +1,6 @@
-# 余白 / Yohaku
+# log
 
-写真を主役にした、静的なフォトギャラリーのサンプルサイト。Astro で組み立てていて、ビルド後は完全な静的ファイル（JS ゼロ・CSS 約 11KB）になる。
+写真を主役にした、静的なフォトギャラリー。Astro で組み立てていて、ビルド後は完全な静的ファイル（JS ゼロ・CSS 約 11KB）になる。
 
 ## 特徴
 
@@ -88,24 +88,42 @@ src/
 │   ├── 404.astro
 │   └── rss.xml.ts
 └── styles/global.css        # デザイントークンと共通スタイル
+
+worker/
+├── index.ts                 # 計測ビーコンと /admin（静的アセットは通さない）
+├── admin.ts                 # 集計画面と SVG グラフ
+└── schema.sql               # D1 のテーブル定義
 ```
 
 ## デプロイ
 
-### Cloudflare Pages（推奨）
+### Cloudflare Workers（現用）
 
 `wrangler.toml` の `[assets] directory` が `./dist` を指している。`bun run build` の前に画像生成が走るので、`public/media` をコミットする必要はない。
 
 ```bash
-bun run build
-npx wrangler deploy
+bun run deploy     # build → wrangler deploy
 ```
 
-初回は `npx wrangler login` が必要。独自ドメインや本番 URL が決まったら、ビルド時に `SITE_URL` を渡す。
+初回は `npx wrangler login` が必要。`main` に push すれば GitHub Actions が同じことをやる。
+
+### アクセス解析
+
+サイト内に軽量なアクセス解析を持っている。外部サービスは使わず、Cloudflare の D1 と Worker だけで完結する。
+
+- **計測**: 各ページの末尾に 1×1 の `<img>` を置いているだけ。クライアント JS は動かない。このパスだけ Worker が受け、D1 に 1 行書き込んでから画像を返す。HTML・CSS・画像は Worker を通らないので、表示速度は変わらない。
+- **画面**: `https://<本番URL>/admin` で集計を見る。Basic 認証（ユーザー名は `admin`）。
+- **パスワード**: Worker のシークレットに入っている。変えるときは `wrangler secret put ADMIN_PASS`。ローカル開発では `.dev.vars` に書く（`.dev.vars.example` をコピー）。
+- **DB**: `yohaku-analytics`。スキーマは `worker/schema.sql`。初回だけ `bun run db:schema`。
 
 ```bash
-SITE_URL=https://gallery.example.com bun run build
+bun run worker      # ローカルで Worker を起動（http://localhost:8787）
+bun run db:local    # ローカルの D1 にスキーマを適用
+bun run db:schema   # 本番の D1 にスキーマを適用
+wrangler secret put ADMIN_PASS   # 管理画面のパスワードを設定
 ```
+
+ローカルの D1 は空なので、`/admin` は最初「データなし」になる。表示を確かめたいときは `wrangler d1 execute yohaku-analytics --local --file=<seed.sql>` でダミーを入れる。
 
 ### その他のホスティング
 

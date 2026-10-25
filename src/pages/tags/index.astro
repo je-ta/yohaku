@@ -24,8 +24,8 @@ const sortedGroups = [...groups.values()].sort(
 ---
 
 <BaseLayout
-  title="Tags — 余白"
-  description="サンプルギャラリーをタグから探す。"
+  title="Tags — log"
+  description="記事をタグから探す。"
 >
   <header class="page-head wrap">
     <p class="eyebrow">Tags</p>
@@ -155,11 +155,21 @@ const sortedGroups = [...groups.values()].sort(
 
   .tag-group__posts {
     display: grid;
+    /*
+     * minmax(220px, 1fr) のままだと、項目の最小幅が中身の固有幅（長い記事
+     * タイトル）になり、狭い画面で 1 列がはみ出す。最小を 0 にして、
+     * タイトル側を省略表示で縮められるようにする。
+     */
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
     gap: 0.75rem;
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+
+  .tag-group__posts li,
+  .tag-group__posts a {
+    min-width: 0;
   }
 
   .tag-group__posts a {

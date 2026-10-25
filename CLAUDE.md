@@ -1,4 +1,4 @@
-# 余白 / Yohaku
+# log
 
 このリポジトリは、写真と文章を置くための静的サイト。Astro で作っていて、ビルド後は完全な静的ファイルになる。
 
@@ -31,7 +31,7 @@ bun run add-photos ~/Pictures/trip/*.jpg
 
 出力されたブロックを記事の frontmatter に貼るだけ。
 
-**既存のサンプル写真を流用する場合:** `photoId` は 0〜71 の数値。`scripts/fetch-images.mjs` が picsum から取得する。記事を書くだけなら何もしなくてよい。
+**既存のアセットを流用する場合:** `src/content/posts/_assets/` にある原本のファイル名（拡張子なし）がそのまま `photoId` になる。`bun run assets` で `public/media/` を再生成できる。記事を書くだけなら何もしなくてよい。
 
 ### 3. frontmatter を書く
 
@@ -104,7 +104,7 @@ bun run check    # frontmatter の検証（スキーマ違反はここで落ち�
 `alt` が空。写真の内容を書く。
 
 **`images.N.photoId: Invalid input`**
-`photoId` の形式違い。数値（picsum 由来）か 16桁 hex（`add-photos` 由来）のみ。
+`photoId` の形式違い。数値（旧 picsum 記事の名残）か 16桁 hex（`add-photos` 由来）のみ。
 
 **写真が表示されない（本番だけ404）**
 `src/content/posts/_assets/` に原本が入っているか確認する。`public/media/` は git 管理外なので、原本が無いと CI で生成できない。`bun run assets` で再生成できる。
@@ -138,6 +138,28 @@ scripts/
 ├── render-assets.mjs  # _assets/ の原本から配信用画像を生成
 ├── add-photos.mjs     # 手持ちの写真を取り込む（原本も保存）
 └── new-post.mjs       # 記事の雛形
+
+worker/
+├── index.ts           # 計測ビーコン（/__a.gif）と /admin
+├── admin.ts           # 集計画面と SVG グラフ
+└── schema.sql         # D1 のテーブル定義
+```
+
+## アクセス解析
+
+自前の軽量解析。外部サービスもクライアント JS も使わない。
+
+- `BaseLayout.astro` の末尾に 1×1 の `<img src="/__a.gif?p=<path>">` を置いている。これが計測のすべて。
+- `wrangler.toml` の `run_worker_first` で `/__a.gif` と `/admin` だけ Worker に通す。**それ以外の静的アセットは Worker を通らない**ので、表示速度は落ちない。ここを触るときは必ずこの前提を守る。
+- Worker は D1（`yohaku-analytics`）に 1 行書いてから GIF を返す。ボット（UA 判定）と `Sec-Purpose: prefetch` は数えない。
+- `/admin` は Basic 認証。パスワードは Worker のシークレット `ADMIN_PASS`。
+- ローカルの D1 は空なので `/admin` は「データなし」から始まる。見た目を確認するときはダミーを入れる。
+
+```bash
+bun run worker                       # ローカルで Worker を起動
+bun run db:local                     # ローカル D1 にスキーマ
+bun run db:schema                    # 本番 D1 にスキーマ
+wrangler secret put ADMIN_PASS       # 管理画面のパスワード
 ```
 
 ## 技術的な前提

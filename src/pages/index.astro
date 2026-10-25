@@ -16,8 +16,8 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort();
 ---
 
 <BaseLayout
-  title="余白 — 写真を、ゆっくり見る。"
-  description="日々の光景を写真と文章で綴る。写真は Lorem Picsum / Unsplash の提供です。"
+  title="log — 写真を、ゆっくり見る。"
+  description="日々の光景を写真と文章で綴る記録。"
   image={featured ? mediaUrl(featured.data.images[0], clampWidth(featured.data.images[0], 1280), 'webp') : undefined}
 >
   <section class="hero wrap">

@@ -1,5 +1,5 @@
 ---
-title: 8GBのGPUで画像生成はどこまで行けるか
+title: RTX 2080 SUPER 8GBで画像生成はどこまで行けるか
 date: 2026-10-25
 category: still-life
 tags:
