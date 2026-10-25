@@ -30,9 +30,18 @@ const related = others
 
 const pageTitle = `${title} — log`;
 
-// 最初の写真だけは body の描画前から取りに行かせる（LCP が早くなる）
-const heroImage = sorted[0];
-const heroPreload = new URL(mediaUrl(heroImage, 860, 'avif'), Astro.site ?? Astro.url).href;
+// 構造化データ用。写真は絶対 URL で渡す（相対だと評価されない）。
+const siteOrigin = Astro.site ?? Astro.url;
+const structuredImages = sorted
+  .slice(0, 6)
+  .map((img) => new URL(mediaUrl(img, clampWidth(img, 1280), 'webp'), siteOrigin).href);
+
+// 記事末尾のギャラリーを出す記事だけ、先頭の写真を先読みする。
+// gallery: false の記事ではその画像は画面に出ないので、先読みすると
+// 使わないバイトを奪うだけになる（LCP も悪化する）。
+const heroPreload = gallery
+  ? new URL(mediaUrl(sorted[0], 860, 'avif'), siteOrigin).href
+  : undefined;
 ---
 
 <BaseLayout
@@ -41,6 +50,7 @@ const heroPreload = new URL(mediaUrl(heroImage, 860, 'avif'), Astro.site ?? Astr
   image={mediaUrl(coverPhoto, clampWidth(coverPhoto, 1280), 'webp')}
   type="article"
   preloadImage={heroPreload}
+  article={{ headline: title, date, category, tags, images: structuredImages }}
 >
   <article class="post">
     <header class="post__header wrap wrap--narrow">

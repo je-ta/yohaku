@@ -1,0 +1,35 @@
+User-agent: *
+Allow: /
+
+# 管理画面と計測用のエンドポイントは辿らせない
+Disallow: /admin
+Disallow: /admin/
+Disallow: /__a.gif
+
+# AI 検索・生成AIのクローラーは明示的に許可する。
+# 引用元として認識されたいので、ここで止めない。
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://yohaku.je-ta-gallery.workers.dev/sitemap-index.xml

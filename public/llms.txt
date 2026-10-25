@@ -1,0 +1,21 @@
+# log
+
+> RTX 2080 SUPER（8GB VRAM）でローカル画像生成モデルを動かした記録。
+> MOSS-Image と Z-Image Turbo の実測ベンチマーク、高速化の手法、Civitai の LoRA 検証を、
+> 生成時間・プロンプト・画像付きでまとめている。
+
+このサイトは写真と技術メモの記録。すべての記事は日本語で、実測値には生成環境と条件を併記している。
+
+## 記事
+
+- [RTX 2080 SUPER 8GBでMOSS-ImageとZ-Image Turboを比較した](https://yohaku.je-ta-gallery.workers.dev/posts/2026/10/2026-10-25-8gb-image-generation/): RTX 2080 SUPER 8GBでMOSS-Image と Z-Image Turbo を実測比較。MOSSは4step蒸留で96秒、Z-Imageは20秒。
+- [RTX 2080 SUPERでMOSS-Imageを98秒から18秒に高速化した方法](https://yohaku.je-ta-gallery.workers.dev/posts/2026/10/2026-10-25-moss-speedup/): ボトルネックはテキストエンコーダの67秒で、conditioningキャッシュが最も効いた。
+- [MOSS-Imageのプロンプトキャッシュで10枚を5分で生成する](https://yohaku.je-ta-gallery.workers.dev/posts/2026/10/2026-10-25-prompt-cache/): 同一プロンプトのままseedを振ると2枚目以降が18秒。10枚323.6秒の実測ログ。
+- [【MOSS Image】Blue Archive style LoRAをMOSS-Imageで試した](https://yohaku.je-ta-gallery.workers.dev/posts/2026/10/2026-10-25-blue-archive-lora/): CivitaiのBlue Archive LoRAを8GBで検証。10パターン×3seed=30枚の生成結果。
+
+## このサイトについて
+
+- 環境: RTX 2080 SUPER（8GB VRAM / sm75）、Ryzen 9 3900XT、32GB RAM、Ubuntu 24.04
+- 生成環境: ComfyUI
+- 記事は Markdown で書き、Astro で静的生成している
+- 計測は 1×1 画像リクエストのみ（クライアント JS なし）

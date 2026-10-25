@@ -12,6 +12,16 @@ interface Props {
   noindex?: boolean;
   /** 先読みしておきたい画像 URL（LCP 候補） */
   preloadImage?: string;
+  /** 構造化データに載せる記事の情報。記事ページだけ渡す。 */
+  article?: {
+    /** 記事タイトルそのもの（`— サイト名` を含めない） */
+    headline: string;
+    date: Date;
+    modified?: Date;
+    category: string;
+    tags: string[];
+    images: string[];
+  };
 }
 
 const {
@@ -21,12 +31,47 @@ const {
   type = 'website',
   noindex = false,
   preloadImage,
+  article,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 const ogImage = image ? new URL(image, Astro.site ?? Astro.url).href : undefined;
 const siteName = 'log';
 const year = new Date().getFullYear();
+
+/**
+ * 構造化データ。検索エンジンと AI 検索に「何のサイトの、誰が書いた、
+ * いつの記事か」を機械可読で渡す。本文の内容そのものは持たせない。
+ */
+const person = { '@type': 'Person', name: 'tomoya' };
+
+const graph: Record<string, unknown>[] = [
+  {
+    '@type': 'WebSite',
+    '@id': new URL('/', Astro.site ?? Astro.url).href,
+    url: new URL('/', Astro.site ?? Astro.url).href,
+    name: siteName,
+    inLanguage: 'ja',
+  },
+  article && {
+    '@type': 'BlogPosting',
+    headline: article.headline,
+    description: description || undefined,
+    url: canonical.href,
+    mainEntityOfPage: canonical.href,
+    datePublished: article.date.toISOString(),
+    dateModified: (article.modified ?? article.date).toISOString(),
+    articleSection: article.category,
+    keywords: article.tags.join(', ') || undefined,
+    inLanguage: 'ja',
+    image: article.images,
+    author: person,
+    publisher: { '@type': 'Organization', name: siteName },
+    isPartOf: { '@id': new URL('/', Astro.site ?? Astro.url).href },
+  },
+].filter(Boolean) as Record<string, unknown>[];
+
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
 
 const navItems = [
   { href: url('/'), label: 'Posts' },
@@ -50,6 +95,7 @@ const isCurrent = (href: string) =>
     <link rel="canonical" href={canonical} />
     <link rel="alternate" type="application/rss+xml" title={siteName} href={url('/rss.xml')} />
     <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    {!noindex && <script type="application/ld+json" set:html={jsonLd} />}
     <meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light dark" />

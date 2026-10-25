@@ -74,6 +74,9 @@ export function inlinePhotos(options = {}) {
   const src = (id, w, ext) => `${prefix}media/${id}/${w}.${ext}`;
   const srcset = (id, widths, ext) => widths.map((w) => `${src(id, w, ext)} ${w}w`).join(', ');
 
+  /** 記事ごとに「本文の最初の画像か」を数えるためのカウンタ。 */
+  const seen = new Map();
+
   return defineHastPlugin({
     name: 'inline-photos',
     element: {
@@ -83,6 +86,14 @@ export function inlinePhotos(options = {}) {
         if (typeof raw !== 'string' || !raw.startsWith('photo:')) return;
         const id = raw.slice('photo:'.length);
         const alt = typeof node.properties?.alt === 'string' ? node.properties.alt : '';
+
+        // 本文の最初の 1 枚は LCP になりやすいので、遅延させずに先に取らせる。
+        // 2 枚目以降は lazy のまま（画面外の画像で帯域を使わない）。
+        // fileURL は毎回別インスタンスで来ることがあるので、文字列にして数える。
+        const key = ctx.fileURL?.href ?? 'unknown';
+        const index = seen.get(key) ?? 0;
+        seen.set(key, index + 1);
+        const priority = index === 0;
 
         // ctx.source は frontmatter が除かれた本文だけなので、元ファイルを読む
         let sourceText = '';
@@ -134,7 +145,8 @@ export function inlinePhotos(options = {}) {
               properties: {
                 src: src(id, fallback, 'webp'),
                 alt,
-                loading: 'lazy',
+                loading: priority ? 'eager' : 'lazy',
+                fetchpriority: priority ? 'high' : 'auto',
                 decoding: 'async',
               },
               children: [],
