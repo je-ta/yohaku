@@ -3,7 +3,7 @@ import sitemap from '@astrojs/sitemap';
 
 // サイトの URL。GitHub Pages で <user>.github.io/<repo>/ に出す場合は
 // site に https://<user>.github.io、base に '/<repo>' を入れる。
-const site = process.env.SITE_URL ?? 'https://image-gallery-samples.tomoyaikeda.workers.dev';
+const site = process.env.SITE_URL ?? 'https://image-gallery-samples.je-ta-gallery.workers.dev';
 const base = process.env.BASE_PATH ?? '/';
 
 export default defineConfig({

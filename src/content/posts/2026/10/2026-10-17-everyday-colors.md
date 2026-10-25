@@ -15,6 +15,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#987a68"
     alt: サンプル写真 1
@@ -27,6 +28,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#aeb9bf"
     alt: サンプル写真 2
@@ -39,6 +41,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#b7afa6"
     alt: サンプル写真 3
@@ -51,6 +54,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#b0b0b0"
     alt: サンプル写真 4
@@ -63,6 +67,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#a2a5ac"
     alt: サンプル写真 5
@@ -75,6 +80,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#5375b1"
     alt: サンプル写真 6
@@ -87,6 +93,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#6e98a9"
     alt: サンプル写真 7
@@ -99,6 +106,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#787278"
     alt: サンプル写真 8
@@ -111,6 +119,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#927b84"
     alt: サンプル写真 9
@@ -123,6 +132,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#4a595b"
     alt: サンプル写真 10
@@ -135,6 +145,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#8e8e8e"
     alt: サンプル写真 11
@@ -147,6 +158,7 @@ images:
     widths:
       - 320
       - 640
+      - 860
       - 1280
     color: "#bcab8c"
     alt: サンプル写真 12

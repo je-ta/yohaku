@@ -13,7 +13,7 @@ import sharp from 'sharp';
 const ROOT = new URL('..', import.meta.url).pathname;
 const OUT = join(ROOT, 'public', 'media');
 const MANIFEST = join(ROOT, 'src', 'content', 'image-manifest.json');
-const WIDTHS = [320, 640, 1280];
+const WIDTHS = [320, 640, 860, 1280];
 const QUALITY = 66;
 /** 取得元の最大幅。ここから各サイズへ縮小する。 */
 const SOURCE_WIDTH = 1280;

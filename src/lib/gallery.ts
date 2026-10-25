@@ -27,7 +27,7 @@ export function aspectRatio(image: Pick<GalleryImage, 'w' | 'h'>): string {
  * 生成済みサイズの別名。記事の最大表示幅は 860px なので、
  * 1280 は高解像度端末向けの 1.5x 相当として扱う。
  */
-const FILE_WIDTHS: Record<number, number> = { 320: 320, 640: 640, 1280: 1280 };
+const FILE_WIDTHS: Record<number, number> = { 320: 320, 640: 640, 860: 860, 1280: 1280 };
 
 /** 指定幅の画像 URL。生成済みのサイズだけを指す。 */
 export function imageUrl(image: Pick<GalleryImage, 'photoId'>, width: number): string {
