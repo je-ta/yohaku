@@ -32,6 +32,8 @@ const posts = defineCollection({
     description: z.string().default(''),
     /** 一覧・OGP に使う表紙。省略時は先頭の画像。 */
     cover: z.string().optional(),
+    /** 記事末尾のギャラリーを出すか。本文中に差し込む記事では false にする。 */
+    gallery: z.boolean().default(true),
     images: z.array(imageSchema).min(1),
   }),
 });

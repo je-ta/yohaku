@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { title, date, category, tags, description, images, cover } = post.data;
+const { title, date, category, tags, description, images, cover, gallery = true } = post.data;
 const { Content } = await render(post);
 
 const sorted = [...images];
@@ -37,7 +37,7 @@ const heroPreload = new URL(mediaUrl(heroImage, 860, 'avif'), Astro.site ?? Astr
 
 <BaseLayout
   title={pageTitle}
-  description={description || `${title}のサンプルギャラリー。`}
+  description={description || `${title}の記録。`}
   image={mediaUrl(coverPhoto, clampWidth(coverPhoto, 1280), 'webp')}
   type="article"
   preloadImage={heroPreload}
@@ -76,13 +76,15 @@ const heroPreload = new URL(mediaUrl(heroImage, 860, 'avif'), Astro.site ?? Astr
       <Content />
     </div>
 
-    <div class="post__gallery wrap wrap--narrow">
-      {
-        sorted.map((image, i) => (
-          <GalleryImage image={image} index={i + 1} total={sorted.length} priority={i === 0} />
-        ))
-      }
-    </div>
+    {
+      gallery && (
+        <div class="post__gallery wrap wrap--narrow">
+          {sorted.map((image, i) => (
+            <GalleryImage image={image} index={i + 1} total={sorted.length} priority={i === 0} />
+          ))}
+        </div>
+      )
+    }
 
     <footer class="post__footer wrap wrap--narrow">
       <p class="post__count">{images.length} 枚の写真を掲載しています。</p>
@@ -182,8 +184,19 @@ const heroPreload = new URL(mediaUrl(heroImage, 860, 'avif'), Astro.site ?? Astr
 
   .post__gallery {
     display: grid;
+    /*
+     * 1fr のままだと、グリッド項目の最小幅が中身（画像）の固有幅になり、
+     * 画像が 1 枚でも画面より広いとページ全体が横に広がる。
+     * minmax(0, 1fr) で 0 まで縮められるようにして、はみ出しを止める。
+     */
+    grid-template-columns: minmax(0, 1fr);
     gap: clamp(1.5rem, 4vw, 2.75rem);
     max-width: 900px;
+  }
+
+  /* 念のため、項目側でも縮小を許可しておく */
+  .post__gallery > :global(*) {
+    min-width: 0;
   }
 
   .post__footer {

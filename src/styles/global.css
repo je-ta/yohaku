@@ -482,3 +482,16 @@ a:hover {
   border-top: 1px solid var(--border);
   margin-block: 2.5em;
 }
+
+/* 本文中に差し込んだ写真（rehype-inline-photos） */
+.post__inline-photo {
+  display: block;
+  margin: clamp(1.75rem, 5vw, 2.75rem) 0;
+}
+
+.post__inline-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}

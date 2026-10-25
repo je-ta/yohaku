@@ -9,175 +9,144 @@ tags:
   - benchmark
 description: RTX 2080 SUPER 8GBで、MOSS-Image と Z-Image Turbo を実測。4step蒸留で96秒、最新モデルで20秒。数字と絵で比べた記録。
 cover: 2a4e058b0b895573
+gallery: false
 images:
   - id: 2a4e058b0b895573
     photoId: "2a4e058b0b895573"
     v: 1
     w: 1024
     h: 1024
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#596163"
     alt: 雨上がりの夜の商店街を自転車で走る人を描いたZ-Imageの生成画像
-    caption: "Z-Image Turbo / 1024px / 8steps / 20秒"
   - id: 800ca660048bcb8a
     photoId: "800ca660048bcb8a"
     v: 1
     w: 1024
     h: 1024
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#4b414a"
     alt: 雨上がりの夜の商店街を自転車で走る人を描いたMOSS-Imageの生成画像
-    caption: "MOSS-Image / 1024px / 4steps / 96秒"
   - id: f1fa2b7fbc28916e
     photoId: "f1fa2b7fbc28916e"
     v: 1
     w: 1024
     h: 1024
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#7a736c"
     alt: 夕暮れの港でこちらを見る老漁師の肖像、Z-Image生成
-    caption: "Z-Image Turbo / ポートレート"
   - id: 8eb32d02eac06c7f
     photoId: "8eb32d02eac06c7f"
     v: 1
     w: 1024
     h: 1024
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#74685e"
     alt: 夕暮れの港でこちらを見る老漁師の肖像、MOSS-Image生成
-    caption: "MOSS-Image / ポートレート"
   - id: 5467ba898495701d
     photoId: "5467ba898495701d"
     v: 1
     w: 1024
     h: 1024
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#85868f"
     alt: 雨のネオン街に立つ銀髪の少女のアニメ調イラスト、Z-Image生成
-    caption: "Z-Image Turbo / アニメ調"
   - id: 1d0de1e3e387e860
     photoId: "1d0de1e3e387e860"
     v: 1
     w: 1024
     h: 1024
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#897896"
     alt: 雨のネオン街に立つ白髪の少女のアニメ調イラスト、MOSS-Image生成
-    caption: "MOSS-Image / アニメ調"
   - id: 96c1486e578c6f40
     photoId: "96c1486e578c6f40"
     v: 1
     w: 1008
     h: 1008
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#71a2af"
     alt: 青空の下の一本道を制服姿の少女が歩く、日本語タイトル文字入りのイラスト
-    caption: "MOSS-Image のレイアウト指定。箱で構図と文字を指定できる"
   - id: 57bca85c0f1729cf
     photoId: "57bca85c0f1729cf"
     v: 1
     w: 1024
     h: 1024
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#81828b"
     alt: 雪の山道に停まる赤いクラシックカーのZ-Image生成画像
-    caption: "Z-Image Turbo / 赤い車"
   - id: d495ba6bfd71ca79
     photoId: "d495ba6bfd71ca79"
     v: 1
     w: 1024
     h: 1024
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#776267"
     alt: 雪の山道に停まる赤いクラシックカーのMOSS-Image生成画像
-    caption: "MOSS-Image / 赤い車"
   - id: 20d0f8cada2eda19
     photoId: "20d0f8cada2eda19"
     v: 1
     w: 1024
     h: 1024
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#3c4335"
     alt: 陽光が差し込む竹林の小道、Z-Image生成
-    caption: "Z-Image Turbo / 1024px / 4steps / 20秒"
   - id: 351e2a3470481bc5
     photoId: "351e2a3470481bc5"
     v: 1
     w: 768
     h: 768
-    widths:
-      - 320
-      - 640
+    widths: [320, 640]
     color: "#484625"
     alt: 陽光が差し込む竹林の小道、MOSS-Image生成
-    caption: "MOSS-Image / 768px / 87秒"
   - id: 3c1b5318f7c72290
     photoId: "3c1b5318f7c72290"
     v: 1
     w: 1280
     h: 1280
-    widths:
-      - 320
-      - 640
-      - 860
-      - 1280
+    widths: [320, 640, 860, 1280]
     color: "#404432"
     alt: 1280pxで生成した竹林の小道、Z-Image生成
-    caption: "Z-Image Turbo / 1280px / 40秒"
   - id: 3c1834e382432956
     photoId: "3c1834e382432956"
     v: 1
     w: 1024
     h: 1024
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#3a4131"
     alt: 6stepsで生成した竹林の小道、Z-Image生成
-    caption: "Z-Image Turbo / 1024px / 6steps / 18秒"
   - id: bb2dc056398a479d
     photoId: "bb2dc056398a479d"
     v: 1
     w: 1024
     h: 1024
-    widths:
-      - 320
-      - 640
-      - 860
+    widths: [320, 640, 860]
     color: "#734b3f"
     alt: 夕暮れの岩場の灯台と波、MOSS-Image生成
-    caption: "MOSS-Image / 1024px / 96秒"
+  - id: 8d3cc96ac2c42206
+    photoId: "8d3cc96ac2c42206"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#d1c6bc"
+    alt: 朝の光の中に座る成人女性のヌード、アニメ調、MOSS-Image生成
+  - id: dfe60d0c5965b4ca
+    photoId: "dfe60d0c5965b4ca"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#dfcfc7"
+    alt: 白いシーツの上に横たわる成人女性のヌード、アニメ調、MOSS-Image生成
+  - id: d49c73132e031ba3
+    photoId: "d49c73132e031ba3"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#59453a"
+    alt: 薄暗い寝室に立つ成人女性のヌード、アニメ調、MOSS-Image生成
 ---
 
 家のGPUで画像生成、どこまで実用的に回せるのか。8GBという少ないVRAMで1年近く試してきた結果を、数字と絵で並べておく。
@@ -228,7 +197,11 @@ images:
 
 ## 同じプロンプトで比べる
 
-雨上がりの夜の商店街。Z-Image と MOSS で同じプロンプトを回した。
+雨上がりの夜の商店街。
+
+![雨上がりの商店街、Z-Image生成](photo:2a4e058b0b895573)
+
+![雨上がりの商店街、MOSS-Image生成](photo:800ca660048bcb8a)
 
 | | 生成時間 | 所感 |
 |---|---|---|
@@ -237,12 +210,20 @@ images:
 
 老漁師のポートレート。
 
+![老漁師の肖像、Z-Image生成](photo:f1fa2b7fbc28916e)
+
+![老漁師の肖像、MOSS-Image生成](photo:8eb32d02eac06c7f)
+
 | | 生成時間 | 所感 |
 |---|---|---|
 | Z-Image | 28秒 | 肌の質感が細かい |
 | MOSS | 96秒 | 帽子や服の小物まで描く |
 
 アニメ調は **MOSS が明確に上**。線がきれいで、顔のバランスも安定している。
+
+![雨のネオン街の少女、Z-Image生成](photo:5467ba898495701d)
+
+![雨のネオン街の少女、MOSS-Image生成](photo:1d0de1e3e387e860)
 
 | | 生成時間 | 所感 |
 |---|---|---|
@@ -251,17 +232,29 @@ images:
 
 雪道の赤い車。
 
+![雪道の赤い車、Z-Image生成](photo:57bca85c0f1729cf)
+
+![雪道の赤い車、MOSS-Image生成](photo:d495ba6bfd71ca79)
+
 | | 生成時間 | 所感 |
 |---|---|---|
 | Z-Image | 28秒 | 光沢と雪の質感が自然 |
 | MOSS | 96秒 | 色彩がやや強め |
 
-竹林の小道。Z-Image は 1024px で 20秒、MOSS は 768px で 87秒。
+竹林の小道。
+
+![竹林の小道、Z-Image生成](photo:20d0f8cada2eda19)
+
+![竹林の小道、MOSS-Image生成](photo:351e2a3470481bc5)
 
 | | 解像度 | 生成時間 |
 |---|---|---|
 | Z-Image | 1024px | 20秒 |
 | MOSS | 768px | 87秒 |
+
+灯台と波。MOSS の非アニメ出力。
+
+![灯台と波、MOSS-Image生成](photo:bb2dc056398a479d)
 
 ## 解像度とステップ
 
@@ -274,7 +267,30 @@ images:
 
 Z-Image は 4steps でも十分読める絵が出る。8steps にすると細部が詰まる。
 
+![6stepsで生成した竹林](photo:3c1834e382432956)
+
 1280px に上げても40秒。実用範囲。
+
+![1280pxで生成した竹林](photo:3c1b5318f7c72290)
+
+## アダルトも出る
+
+MOSS はベースモデルの時点で NSFW を出せる。専用LoRAは要らない。
+
+![朝の光の中のヌード](photo:8d3cc96ac2c42206)
+
+![白いシーツの上のヌード](photo:dfe60d0c5965b4ca)
+
+![薄暗い寝室のヌード](photo:d49c73132e031ba3)
+
+| 用途 | 効くプロンプト語 |
+|---|---|
+| 胸 | `completely nude, topless, visible nipples, detailed areolas` |
+| 性器 | `spread legs, detailed pussy, explicit` |
+| 大人の明示 | `mature adult woman in her late twenties` |
+| 画風 | `2D anime illustration, cel shaded anime art, detailed lineart` |
+
+3枚とも4step蒸留で96〜98秒。NSFW LoRA を重ねても速度は変わらず、画風が変わるだけだった。
 
 ## MOSS のチューニングで分かったこと
 
@@ -293,7 +309,9 @@ Z-Image は 4steps でも十分読める絵が出る。8steps にすると細部
 
 MOSS は箱を描いて構図を指定できる。`ComfyUI-MOSS-Layout-YDR` というカスタムノードを使う。
 
-上の画像は「上部中央に大きな日本語タイトル、中央に少女、奥に道」という箱を指定して出したもの。文字も正確に出る。
+![レイアウト指定で生成した、日本語タイトル入りのイラスト](photo:96c1486e578c6f40)
+
+「上部中央に大きな日本語タイトル、中央に少女、奥に道」という箱を指定して出したもの。文字も正確に出る。
 
 | 要素 | 指定内容 |
 |---|---|
@@ -310,9 +328,9 @@ MOSS は箱を描いて構図を指定できる。`ComfyUI-MOSS-Layout-YDR` と�
 |---|---|
 | 写実・風景・物撮り | Z-Image Turbo（速い・きれい） |
 | アニメ・イラスト | MOSS-Image（線がきれい） |
+| アダルト | MOSS-Image（ベースで出る） |
 | 構図や文字を指定したい | MOSS-Image（レイアウト指定） |
 | 大量に回したい | Z-Image Turbo |
-| 日本語の文字を入れたい | MOSS-Image |
 
 ## まとめ
 

@@ -1,5 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { satteri } from '@astrojs/markdown-satteri';
+import { inlinePhotos } from './src/lib/inline-photos.mjs';
 
 // サイトの URL。GitHub Pages で <user>.github.io/<repo>/ に出す場合は
 // site に https://<user>.github.io、base に '/<repo>' を入れる。
@@ -20,5 +22,7 @@ export default defineConfig({
   integrations: [sitemap()],
   markdown: {
     shikiConfig: { theme: 'github-dark-dimmed', wrap: true },
+    // 本文中に `![alt](photo:<photoId>)` と書くと生成済み画像を差し込む
+    processor: satteri({ hastPlugins: [inlinePhotos({ base })] }),
   },
 });
