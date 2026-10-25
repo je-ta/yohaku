@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GalleryImage from '../../components/GalleryImage.astro';
-import { coverImage, formatDate, imageUrl, isoDate, postUrl, tagLabel, url } from '../../lib/gallery';
+import { coverImage, formatDate, isoDate, mediaUrl, postUrl, tagLabel, url } from '../../lib/gallery';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -32,13 +32,13 @@ const pageTitle = `${title} — Image Gallery Samples`;
 
 // 最初の写真だけは body の描画前から取りに行かせる（LCP が早くなる）
 const heroImage = sorted[0];
-const heroPreload = new URL(imageUrl(heroImage, 1280), Astro.site ?? Astro.url).href;
+const heroPreload = new URL(mediaUrl(heroImage, 1280), Astro.site ?? Astro.url).href;
 ---
 
 <BaseLayout
   title={pageTitle}
   description={description || `${title}のサンプルギャラリー。`}
-  image={imageUrl(coverPhoto, 1280)}
+  image={mediaUrl(coverPhoto, 1280)}
   type="article"
   preloadImage={heroPreload}
 >

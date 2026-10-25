@@ -1,5 +1,5 @@
 ---
-import { aspectRatio, imageSrcSet, imageUrl } from '../lib/gallery';
+import { aspectRatio, imageSrcSet, mediaUrl } from '../lib/gallery';
 import type { GalleryImage } from '../lib/gallery';
 
 interface Props {
@@ -19,7 +19,7 @@ const paddedTotal = String(total).padStart(2, '0');
 <figure class="gallery-item" id={`photo-${image.id}`}>
   <div class="gallery-item__frame" style={`--ph: ${image.color}; aspect-ratio: ${aspectRatio(image)}`}>
     <img
-      src={imageUrl(image, 1280)}
+      src={mediaUrl(image, 1280)}
       srcset={imageSrcSet(image)}
       sizes="(min-width: 1100px) 860px, (min-width: 640px) 92vw, 100vw"
       width="1280"

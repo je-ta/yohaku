@@ -12,8 +12,11 @@ export type GalleryImage = {
   caption?: string;
 };
 
-/** 配信元のベース URL。テストや別 CDN へ移すときはここを差し替える。 */
-export const IMAGE_BASE = 'https://picsum.photos';
+/**
+ * 画像はビルド前に `scripts/fetch-images.mjs` が public/media へ生成する。
+ * 配信は同一オリジンなので、リダイレクトも別ドメインへの接続も発生しない。
+ */
+export const MEDIA_DIR = 'media';
 
 /** 画像の縦横比を CSS の aspect-ratio 用文字列にする。 */
 export function aspectRatio(image: Pick<GalleryImage, 'w' | 'h'>): string {
@@ -21,25 +24,25 @@ export function aspectRatio(image: Pick<GalleryImage, 'w' | 'h'>): string {
 }
 
 /**
- * 指定幅の画像 URL を作る。高さは元画像の縦横比から計算するので、
- * 幅を変えても構図が崩れない。`v` は差し替え時のキャッシュ避け。
+ * 生成済みサイズの別名。記事の最大表示幅は 860px なので、
+ * 1280 は高解像度端末向けの 1.5x 相当として扱う。
  */
-export function imageUrl(
-  image: Pick<GalleryImage, 'photoId' | 'v' | 'w' | 'h'>,
-  width: number,
-  format: 'webp' | 'jpeg' = 'webp',
-): string {
-  const ext = format === 'webp' ? '.webp' : '.jpg';
-  const height = Math.max(1, Math.round((width * image.h) / image.w));
-  return `${IMAGE_BASE}/id/${image.photoId}/${width}/${height}${ext}?v=${image.v}`;
+const FILE_WIDTHS: Record<number, number> = { 320: 320, 640: 640, 1280: 1280 };
+
+/** 指定幅の画像 URL。生成済みのサイズだけを指す。 */
+export function imageUrl(image: Pick<GalleryImage, 'photoId'>, width: number): string {
+  const file = FILE_WIDTHS[width] ?? width;
+  return `${MEDIA_DIR}/${image.photoId}/${file}.webp`;
 }
 
-/** srcset 用の候補。元画像より大きい幅は切り捨てる。 */
+/** srcset 用の候補。 */
 export function imageSrcSet(image: GalleryImage): string {
-  return image.widths
-    .filter((w) => w <= image.w)
-    .map((w) => `${imageUrl(image, w)} ${w}w`)
-    .join(', ');
+  return image.widths.map((w) => `${mediaUrl(image, w)} ${w}w`).join(', ');
+}
+
+/** public/ 配下なので base を前置した URL。 */
+export function mediaUrl(image: Pick<GalleryImage, 'photoId'>, width: number): string {
+  return url(imageUrl(image, width));
 }
 
 /** 一覧用のサムネイル。最小幅を使う。 */
@@ -75,7 +78,7 @@ export function tagLabel(tag: string): string {
 }
 
 /**
- * GitHub Pages のサブパス配信に対応するためのリンク組み立て。
+ * サブパス配信（GitHub Pages など）に対応するためのリンク組み立て。
  * BASE_URL は末尾スラッシュ付き（'/' か '/repo/'）で渡ってくる。
  */
 const BASE = import.meta.env.BASE_URL;

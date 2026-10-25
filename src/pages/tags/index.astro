@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { postUrl, thumbUrl } from '../../lib/gallery';
+import { mediaUrl, postUrl } from '../../lib/gallery';
 
 const posts = (await getCollection('posts')).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -66,7 +66,7 @@ const sortedGroups = [...groups.values()].sort(
                 <li>
                   <a href={postUrl(post.id)}>
                     <img
-                      src={thumbUrl(photo)}
+                      src={mediaUrl(photo, Math.min(...photo.widths))}
                       alt=""
                       width={photo.w}
                       height={photo.h}

@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
-import { imageUrl, url } from '../lib/gallery';
+import { mediaUrl, url } from '../lib/gallery';
 
 const posts = (await getCollection('posts')).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -18,7 +18,7 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort();
 <BaseLayout
   title="Image Gallery Samples — 写真で見るサンプルギャラリー"
   description="複数画像のレイアウトと読み込みを確認するためのサンプルギャラリー。写真は Lorem Picsum / Unsplash の提供です。"
-  image={featured ? imageUrl(featured.data.images[0], 1280) : undefined}
+  image={featured ? mediaUrl(featured.data.images[0], 1280) : undefined}
 >
   <section class="hero wrap">
     <p class="eyebrow">Sample Gallery</p>

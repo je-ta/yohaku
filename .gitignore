@@ -28,3 +28,7 @@ Thumbs.db
 
 # 取り込み元のアーカイブ（中身は src/ に展開済み）
 image-gallery-source-*.zip
+
+# 生成画像（scripts/fetch-images.mjs が public/media に書き出す）
+public/media/
+src/content/image-manifest.json

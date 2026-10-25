@@ -5,7 +5,7 @@
 ## 特徴
 
 - **速い** — クライアント JS なし。Web フォントも読まない。CSS は 2 ファイル合計約 11KB。
-- **画像にやさしい** — 幅違いの URL を `srcset` で出し分け、読み込み中は写真の平均色を敷くので画面がちらつかない。記事の先頭画像は `preload` して LCP を稼ぐ。
+- **画像はローカル配信** — `scripts/fetch-images.mjs` が webp を 320/640/1280 で生成し `public/media` に置く。同一オリジンなのでリダイレクトも外部接続もなく、CDN キャッシュがそのまま効く。`srcset` で出し分け、読み込み中は平均色を敷き、記事の先頭画像は `preload` する。
 - **記事は Markdown** — frontmatter に画像メタデータを書くだけで一覧・タグ・RSS・サイトマップに反映される。
 - **スキーマ検証** — Content Collections の Zod スキーマが frontmatter の書き間違いをビルド時に落とす。
 - **ライト/ダーク** — OS 設定に追従（`prefers-color-scheme`）。
@@ -28,6 +28,7 @@ Node 22.23.4 以上が必要（Astro 7 の要件）。パッケージマネー�
 | `bun run preview` | ビルド結果をローカルで確認 |
 | `bun run check` | 型チェック（`astro check`） |
 | `bun run new-post` | 記事の雛形を作る |
+| `bun run images` | 画像を再生成する（`--force` で作り直し） |
 
 ## 記事を追加する
 
@@ -89,11 +90,11 @@ src/
 
 ### Cloudflare Pages（推奨）
 
-`wrangler.toml` に `pages_build_output_dir = "./dist"` を設定済み。
+`wrangler.toml` の `[assets] directory` が `./dist` を指している。`bun run build` の前に画像生成が走るので、`public/media` をコミットする必要はない。
 
 ```bash
 bun run build
-npx wrangler pages deploy dist --project-name image-gallery-samples
+npx wrangler deploy
 ```
 
 初回は `npx wrangler login` が必要。独自ドメインや本番 URL が決まったら、ビルド時に `SITE_URL` を渡す。

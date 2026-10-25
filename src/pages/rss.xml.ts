@@ -1,7 +1,7 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
-import { imageUrl, postUrl } from '../lib/gallery';
+import { mediaUrl, postUrl } from '../lib/gallery';
 
 export async function GET(context: APIContext) {
   const posts = (await getCollection('posts')).sort(
@@ -18,9 +18,9 @@ export async function GET(context: APIContext) {
       pubDate: post.data.date,
       link: postUrl(post.id),
       enclosure: {
-        url: imageUrl(post.data.images[0], 1280, 'jpeg'),
-        type: 'image/jpeg',
-        // 実際のバイト数は配信元依存なので 0（不明）として扱う
+        url: new URL(mediaUrl(post.data.images[0], 1280), context.site ?? context.url).href,
+        type: 'image/webp',
+        // 正確なバイト数は生成時に確定しないので 0（不明）として扱う
         length: 0,
       },
       categories: post.data.tags,

@@ -54,9 +54,6 @@ const isCurrent = (href: string) =>
     <meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light dark" />
 
-    <!-- 画像 CDN へ先に接続しておく（画像の表示開始が早くなる） -->
-    <link rel="preconnect" href="https://picsum.photos" />
-    <link rel="preconnect" href="https://fastly.picsum.photos" crossorigin />
     {
       preloadImage && (
         <link

@@ -1,5 +1,5 @@
 ---
-import { aspectRatio, coverImage, formatDate, isoDate, imageSrcSet, imageUrl, postUrl, thumbUrl } from '../lib/gallery';
+import { aspectRatio, coverImage, formatDate, isoDate, imageSrcSet, mediaUrl, postUrl } from '../lib/gallery';
 import type { GalleryImage } from '../lib/gallery';
 
 interface Props {
@@ -36,9 +36,9 @@ const href = postUrl(id);
       style={`--ph: ${photo.color}; aspect-ratio: ${featured ? '16 / 9' : aspectRatio(photo)}`}
     >
       <img
-        src={featured ? imageUrl(photo, 640) : thumbUrl(photo)}
+        src={mediaUrl(photo, featured ? 640 : Math.min(...photo.widths))}
         srcset={imageSrcSet(photo)}
-        sizes={featured ? '(min-width: 900px) 760px, 100vw' : '(min-width: 900px) 380px, 50vw'}
+        sizes={featured ? '(min-width: 900px) 760px, 100vw' : '(min-width: 900px) 380px, (min-width: 560px) 45vw, 90vw'}
         width={featured ? 640 : Math.min(...photo.widths)}
         height={
           featured
