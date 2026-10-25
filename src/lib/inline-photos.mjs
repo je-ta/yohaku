@@ -10,8 +10,9 @@
  * ディスクを見に行くと本番ビルドが落ちる。frontmatter が唯一の正で、
  * 実際に書き出される幅と一致している。
  */
-import { readdirSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineHastPlugin } from 'satteri';
 
 const SIZES = '(min-width: 1000px) 860px, (min-width: 680px) 90vw, 100vw';
@@ -83,7 +84,16 @@ export function inlinePhotos(options = {}) {
         const id = raw.slice('photo:'.length);
         const alt = typeof node.properties?.alt === 'string' ? node.properties.alt : '';
 
-        const widths = widthsFromFrontmatter(ctx.source ?? '', id).sort((a, b) => a - b);
+        // ctx.source は frontmatter が除かれた本文だけなので、元ファイルを読む
+        let sourceText = '';
+        if (ctx.fileURL) {
+          try {
+            sourceText = readFileSync(fileURLToPath(ctx.fileURL), 'utf8');
+          } catch {
+            sourceText = '';
+          }
+        }
+        const widths = widthsFromFrontmatter(sourceText, id).sort((a, b) => a - b);
         const resolved = widths.length > 0 ? widths : widthsFromDisk(mediaRoot, id);
         if (resolved.length === 0) {
           throw new Error(
