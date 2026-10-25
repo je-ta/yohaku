@@ -5,8 +5,11 @@ import { z } from 'astro/zod';
 const imageSchema = z.object({
   /** 画像を一意に識別する ID（例: 7d19fab2a31f4142） */
   id: z.string().regex(/^[0-9a-f]{8,32}$/),
-  /** 配信元での写真 ID。原寸・複数サイズの URL を組み立てるのに使う。 */
-  photoId: z.number().int().nonnegative(),
+  /**
+   * 画像ファイルの識別子。public/media/<photoId>/ のディレクトリ名になる。
+   * picsum から取り込む既存記事は数値、自分で撮った写真はファイル由来の hex 文字列。
+   */
+  photoId: z.union([z.number().int().nonnegative(), z.string().regex(/^[0-9a-f]{8,32}$/)]),
   /** 画像のバージョン。URL のキャッシュキーとして使う。 */
   v: z.number().int().nonnegative().default(1),
   w: z.number().int().positive(),

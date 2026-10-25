@@ -28,12 +28,16 @@ Node 22.23.4 以上が必要（Astro 7 の要件）。パッケージマネー�
 | `bun run preview` | ビルド結果をローカルで確認 |
 | `bun run check` | 型チェック（`astro check`） |
 | `bun run new-post` | 記事の雛形を作る |
-| `bun run images` | 画像を再生成する（`--force` で作り直し） |
+| `bun run add-photos` | 手持ちの写真を取り込む（frontmatter も出力） |
+| `bun run images` | サンプル画像を再生成する（`--force` で作り直し） |
 
 ## 記事を追加する
 
+書き方の詳細は [CLAUDE.md](./CLAUDE.md) にある。
+
 ```bash
 bun run new-post
+bun run add-photos ~/Pictures/*.jpg   # 自分の写真を使うとき
 ```
 
 `src/content/posts/YYYY/MM/YYYY-MM-DD-slug.md` が生成される。手で書く場合の frontmatter はこう。

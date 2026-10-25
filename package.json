@@ -15,7 +15,8 @@
     "check": "astro check",
     "sync": "astro sync",
     "new-post": "node scripts/new-post.mjs",
-    "images": "node scripts/fetch-images.mjs"
+    "images": "node scripts/fetch-images.mjs",
+    "add-photos": "node scripts/add-photos.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

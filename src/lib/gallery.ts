@@ -2,7 +2,7 @@
 
 export type GalleryImage = {
   id: string;
-  photoId: number;
+  photoId: number | string;
   v: number;
   w: number;
   h: number;
