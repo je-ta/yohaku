@@ -74,7 +74,9 @@ for (const file of files) {
     }
 
     const color = await averageColor(source);
-    const alt = basename(file, extname(file)).replace(/[-_]/g, ' ');
+    // alt はファイル名から作るが、スキーマが空文字を弾くので必ず何かを入れる
+    const stem = basename(file, extname(file)).replace(/[-_]+/g, ' ').trim();
+    const alt = stem || 'photo';
 
     blocks.push(
       [
