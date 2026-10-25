@@ -5,8 +5,10 @@
  * 使う <picture> に置き換える。frontmatter の images と同じ写真を本文の
  * 好きな位置に置ける。
  *
- * 生成済みの幅は public/media/<photoId>/ を実際に見て決める。元画像が
- * 768px のように小さいと 860 は書き出されないため、決め打ちにすると 404 になる。
+ * 幅はその記事の frontmatter にある `widths` を読む。public/media/ は
+ * git 管理外で、CI の型チェック時点ではまだ生成されていないため、
+ * ディスクを見に行くと本番ビルドが落ちる。frontmatter が唯一の正で、
+ * 実際に書き出される幅と一致している。
  */
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -14,8 +16,45 @@ import { defineHastPlugin } from 'satteri';
 
 const SIZES = '(min-width: 1000px) 860px, (min-width: 680px) 90vw, 100vw';
 
-/** public/media/<photoId>/ にある数値ファイル名から、生成済みの幅を拾う。 */
-function widthsFor(mediaRoot, id) {
+/** frontmatter から、その photoId の `widths` を読む。 */
+function widthsFromFrontmatter(source, id) {
+  const front = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!front) return [];
+  const fm = front[1];
+
+  const entry = fm.search(new RegExp(`^\\s*-\\s*id:\\s*["']?${id}["']?\\s*$`, 'm'));
+  if (entry < 0) return [];
+
+  const rest = fm.slice(entry);
+  const key = rest.match(/^\s*widths:\s*(.*)$/m);
+  if (!key) return [];
+
+  // インライン配列: widths: [320, 640, 860]
+  const inline = key[1].trim();
+  if (inline.startsWith('[')) {
+    return inline
+      .replace(/^\[|\]$/g, '')
+      .split(',')
+      .map((v) => Number.parseInt(v.trim(), 10))
+      .filter(Number.isInteger);
+  }
+
+  // ブロック配列: widths:\n  - 320\n  - 640
+  const widths = [];
+  for (const line of rest.slice(key.index + key[0].length).split(/\r?\n/)) {
+    const item = line.match(/^\s+-\s*(\d+)\s*$/);
+    if (item) {
+      widths.push(Number.parseInt(item[1], 10));
+      continue;
+    }
+    if (line.trim() === '') continue;
+    break;
+  }
+  return widths;
+}
+
+/** public/media/<photoId>/ を実際に見て幅を拾う（ローカル用の保険）。 */
+function widthsFromDisk(mediaRoot, id) {
   try {
     return readdirSync(join(mediaRoot, id))
       .map((name) => Number.parseInt(name, 10))
@@ -44,14 +83,15 @@ export function inlinePhotos(options = {}) {
         const id = raw.slice('photo:'.length);
         const alt = typeof node.properties?.alt === 'string' ? node.properties.alt : '';
 
-        const widths = widthsFor(mediaRoot, id);
-        if (widths.length === 0) {
+        const widths = widthsFromFrontmatter(ctx.source ?? '', id).sort((a, b) => a - b);
+        const resolved = widths.length > 0 ? widths : widthsFromDisk(mediaRoot, id);
+        if (resolved.length === 0) {
           throw new Error(
-            `本文の画像 photo:${id} が見つかりません。bun run add-photos で取り込むか、bun run assets で再生成してください。`,
+            `本文の画像 photo:${id} が frontmatter の images にありません。add-photos の出力を frontmatter に貼ってください。`,
           );
         }
         // 表示幅 860px を超える最大のものをフォールバックにする
-        const fallback = widths.find((w) => w >= 860) ?? widths[widths.length - 1];
+        const fallback = resolved.find((w) => w >= 860) ?? resolved[resolved.length - 1];
 
         ctx.replaceNode(node, {
           type: 'element',
@@ -63,7 +103,7 @@ export function inlinePhotos(options = {}) {
               tagName: 'source',
               properties: {
                 type: 'image/avif',
-                srcSet: srcset(id, widths, 'avif'),
+                srcSet: srcset(id, resolved, 'avif'),
                 sizes: SIZES,
               },
               children: [],
@@ -73,7 +113,7 @@ export function inlinePhotos(options = {}) {
               tagName: 'source',
               properties: {
                 type: 'image/webp',
-                srcSet: srcset(id, widths, 'webp'),
+                srcSet: srcset(id, resolved, 'webp'),
                 sizes: SIZES,
               },
               children: [],
