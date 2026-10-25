@@ -88,10 +88,13 @@ MOSS-Image が 1024px で 98秒かかっていた。8GBのGPUで、1枚1分半�
 
 | パーツ | 内容 |
 |---|---|
-| GPU | RTX 2080 SUPER 8GB（sm75） |
-| CPU | Ryzen 9 3900XT（12コア24スレッド） |
+| GPU | NVIDIA RTX 2080 SUPER（8GB VRAM / sm75） |
+| CPU | AMD Ryzen 9 3900XT（12コア24スレッド） |
 | RAM | 32GB |
+| OS | Ubuntu 24.04.5 LTS |
 | ComfyUI | 2026-10-18版 |
+| PyTorch | 2.14.1 + CUDA 13.0 |
+| ドライバ | 595.99.02 |
 
 エンコーダは Qwen3.5-9B（7.0GB）を CPU に逃がしている。8GBに載せると OOM するため。
 

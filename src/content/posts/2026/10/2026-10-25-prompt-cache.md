@@ -97,6 +97,18 @@ images:
 
 MOSS-Image で10枚生成したログ。
 
+## 環境
+
+| パーツ | 内容 |
+|---|---|
+| GPU | NVIDIA RTX 2080 SUPER（8GB VRAM / sm75） |
+| CPU | AMD Ryzen 9 3900XT（12コア24スレッド） |
+| RAM | 32GB |
+| OS | Ubuntu 24.04.5 LTS |
+| ComfyUI | 2026-10-18版 |
+| PyTorch | 2.14.1 + CUDA 13.0 |
+| ドライバ | 595.99.02 |
+
 ## 何をキャッシュしているのか
 
 ComfyUI はノード単位で出力をキャッシュしている。
