@@ -1,6 +1,6 @@
 ---
 title: RTX 2080 SUPER 8GBでMOSS-ImageとZ-Image Turboを比較した
-date: 2026-10-25
+date: 2026-10-25T13:21:41+09:00
 category: still-life
 tags:
   - local-llm

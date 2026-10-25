@@ -1,6 +1,6 @@
 ---
 title: RTX 2080 SUPERでMOSS-Imageを98秒から18秒に高速化した方法
-date: 2026-10-25
+date: 2026-10-25T16:01:32+09:00
 category: still-life
 tags:
   - local-llm

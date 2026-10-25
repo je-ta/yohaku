@@ -87,14 +87,36 @@ export function formatDate(date: Date): string {
   return dateFormatter.format(date);
 }
 
-/** ISO 形式 (YYYY-MM-DD)。<time datetime> 用。 */
+/**
+ * ISO 形式 (YYYY-MM-DD)。<time datetime> 用。
+ *
+ * toISOString() は UTC に直すので、日本時間の夜に書いた記事が前日にずれる。
+ * 表示（formatDate）と同じ Asia/Tokyo で組み立てて、両者の日付を揃える。
+ */
 export function isoDate(date: Date): string {
-  return date.toISOString().slice(0, 10);
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'Asia/Tokyo',
+  }).format(date);
+  return parts; // en-CA は YYYY-MM-DD 形式で返る
 }
 
 /** タグの表示名。スラッグをそのまま出したくないものはここで吸収する。 */
 export function tagLabel(tag: string): string {
   return tag.replace(/-/g, ' ');
+}
+
+/**
+ * 記事を新しい順（投稿順）に並べる。
+ *
+ * date は時刻まで持てる。同じ日付の記事が複数あると、日付だけでは順序が
+ * 決まらず実行ごとに並びが変わりうるので、同着は id で決める。
+ */
+export function byNewest<T extends { id: string; data: { date: Date } }>(a: T, b: T): number {
+  const diff = b.data.date.getTime() - a.data.date.getTime();
+  return diff !== 0 ? diff : b.id.localeCompare(a.id);
 }
 
 /**

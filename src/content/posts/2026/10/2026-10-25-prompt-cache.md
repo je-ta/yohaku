@@ -1,6 +1,6 @@
 ---
 title: MOSS-Imageのプロンプトキャッシュで10枚を5分で生成する
-date: 2026-10-25
+date: 2026-10-25T16:25:15+09:00
 category: still-life
 tags:
   - local-llm

@@ -1,11 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import { postUrl } from '../lib/gallery';
+import { byNewest, postUrl } from '../lib/gallery';
 
-const posts = (await getCollection('posts')).sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
-);
+const posts = (await getCollection('posts')).sort(byNewest);
 ---
 
 <BaseLayout title="404 — log" noindex>
