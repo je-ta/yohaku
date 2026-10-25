@@ -51,6 +51,46 @@ images:
     widths: [320, 640, 860]
     color: "#c8b3b7"
     alt: 朝の光の中、見上げるホシノ
+  - id: c11381781e92f979
+    photoId: "c11381781e92f979"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#d8bdbb"
+    alt: ホシノ
+  - id: b17fdfbb96183b2e
+    photoId: "b17fdfbb96183b2e"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#cbbab9"
+    alt: ホシノ
+  - id: 3b676f5bb8783fc0
+    photoId: "3b676f5bb8783fc0"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#5b494c"
+    alt: ホシノ
+  - id: e4045a386a02b180
+    photoId: "e4045a386a02b180"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#604332"
+    alt: ホシノ
+  - id: fb763268146e31fd
+    photoId: "fb763268146e31fd"
+    v: 1
+    w: 1024
+    h: 1024
+    widths: [320, 640, 860]
+    color: "#604c4a"
+    alt: ホシノ
 ---
 
 ![1](photo:bcd29cf2368561da)
@@ -62,3 +102,13 @@ images:
 ![4](photo:d0eb09b4d3c99347)
 
 ![5](photo:c2d2a611a95c19da)
+
+![6](photo:c11381781e92f979)
+
+![7](photo:b17fdfbb96183b2e)
+
+![8](photo:3b676f5bb8783fc0)
+
+![9](photo:e4045a386a02b180)
+
+![10](photo:fb763268146e31fd)
