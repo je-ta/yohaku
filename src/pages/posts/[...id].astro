@@ -45,7 +45,7 @@ const heroPreload = new URL(mediaUrl(heroImage, 860, 'avif'), Astro.site ?? Astr
   <article class="post">
     <header class="post__header wrap wrap--narrow">
       <nav class="post__back" aria-label="パンくず">
-        <a href={url('/')}>← Gallery</a>
+        <a href={url('/')}>← Posts</a>
       </nav>
 
       <p class="post__meta">
@@ -88,7 +88,7 @@ const heroPreload = new URL(mediaUrl(heroImage, 860, 'avif'), Astro.site ?? Astr
 
     <footer class="post__footer wrap wrap--narrow">
       <p class="post__count">{images.length} 枚の写真を掲載しています。</p>
-      <a class="btn" href={url('/')}>ギャラリー一覧へ戻る</a>
+      <a class="btn" href={url('/')}>記事一覧へ戻る</a>
     </footer>
 
     {
