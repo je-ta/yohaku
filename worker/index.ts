@@ -49,6 +49,18 @@ export default {
     if (path === '/__a.gif') return handleBeacon(request, url, env, ctx);
     if (path === '/admin' || path.startsWith('/admin/')) return handleAdmin(request, env);
 
+    // Google Search Console の所有権確認ファイル。
+    // 静的アセット側の .html は trailingSlash の設定で 307 を返すことがあり、
+    // 検証クローラーはリダイレクトを辿らない。ここで直接返して確実にする。
+    if (path === '/google258229f4ca84e88f.html') {
+      return new Response('google-site-verification: google258229f4ca84e88f.html', {
+        headers: {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'public, max-age=3600',
+        },
+      });
+    }
+
     // run_worker_first に載っていないパスはここへ来ないが、念のため素通しする。
     return env.ASSETS.fetch(request);
   },

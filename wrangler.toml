@@ -11,7 +11,7 @@ binding = "ASSETS"
 not_found_handling = "404-page"
 # ここに載せたパスだけ Worker を通す。それ以外（HTML/CSS/画像）は
 # エッジから直接返るので、ページ表示のレイテンシは変わらない。
-run_worker_first = ["/__a.gif", "/admin", "/admin/*"]
+run_worker_first = ["/__a.gif", "/admin", "/admin/*", "/google258229f4ca84e88f.html"]
 
 [[d1_databases]]
 binding = "DB"

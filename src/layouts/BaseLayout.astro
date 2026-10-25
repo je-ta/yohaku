@@ -95,6 +95,8 @@ const isCurrent = (href: string) =>
     <link rel="canonical" href={canonical} />
     <link rel="alternate" type="application/rss+xml" title={siteName} href={url('/rss.xml')} />
     <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    {/* Google Search Console の所有権確認。public/ の HTML ファイルと二段構え。 */}
+    <meta name="google-site-verification" content="google258229f4ca84e88f" />
     {!noindex && <script type="application/ld+json" set:html={jsonLd} />}
     <meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)" />
