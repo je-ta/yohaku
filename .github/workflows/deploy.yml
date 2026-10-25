@@ -40,3 +40,9 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
+          # 管理画面のパスワード。これが無いと `wrangler deploy` が
+          # Worker のシークレットを引き継げず、/admin が 503 になる。
+          secrets: |
+            ADMIN_PASS
+        env:
+          ADMIN_PASS: ${{ secrets.ADMIN_PASS }}
