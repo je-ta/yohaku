@@ -32,13 +32,13 @@ const pageTitle = `${title} — Image Gallery Samples`;
 
 // 最初の写真だけは body の描画前から取りに行かせる（LCP が早くなる）
 const heroImage = sorted[0];
-const heroPreload = new URL(mediaUrl(heroImage, 1280), Astro.site ?? Astro.url).href;
+const heroPreload = new URL(mediaUrl(heroImage, 860, 'avif'), Astro.site ?? Astro.url).href;
 ---
 
 <BaseLayout
   title={pageTitle}
   description={description || `${title}のサンプルギャラリー。`}
-  image={mediaUrl(coverPhoto, 1280)}
+  image={mediaUrl(coverPhoto, 1280, 'webp')}
   type="article"
   preloadImage={heroPreload}
 >

@@ -18,7 +18,7 @@ export async function GET(context: APIContext) {
       pubDate: post.data.date,
       link: postUrl(post.id),
       enclosure: {
-        url: new URL(mediaUrl(post.data.images[0], 1280), context.site ?? context.url).href,
+        url: new URL(mediaUrl(post.data.images[0], 1280, 'webp'), context.site ?? context.url).href,
         type: 'image/webp',
         // 正確なバイト数は生成時に確定しないので 0（不明）として扱う
         length: 0,

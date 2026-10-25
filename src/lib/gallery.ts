@@ -29,25 +29,36 @@ export function aspectRatio(image: Pick<GalleryImage, 'w' | 'h'>): string {
  */
 const FILE_WIDTHS: Record<number, number> = { 320: 320, 640: 640, 860: 860, 1280: 1280 };
 
-/** 指定幅の画像 URL。生成済みのサイズだけを指す。 */
-export function imageUrl(image: Pick<GalleryImage, 'photoId'>, width: number): string {
-  const file = FILE_WIDTHS[width] ?? width;
-  return `${MEDIA_DIR}/${image.photoId}/${file}.webp`;
-}
+/** 配信フォーマット。AVIF を先に、WebP をフォールバックにする。 */
+export type ImageFormat = 'avif' | 'webp';
 
-/** srcset 用の候補。 */
-export function imageSrcSet(image: GalleryImage): string {
-  return image.widths.map((w) => `${mediaUrl(image, w)} ${w}w`).join(', ');
+/** 指定幅・形式の画像 URL。生成済みのサイズだけを指す。 */
+export function imageUrl(
+  image: Pick<GalleryImage, 'photoId'>,
+  width: number,
+  format: ImageFormat = 'avif',
+): string {
+  const file = FILE_WIDTHS[width] ?? width;
+  return `${MEDIA_DIR}/${image.photoId}/${file}.${format}`;
 }
 
 /** public/ 配下なので base を前置した URL。 */
-export function mediaUrl(image: Pick<GalleryImage, 'photoId'>, width: number): string {
-  return url(imageUrl(image, width));
+export function mediaUrl(
+  image: Pick<GalleryImage, 'photoId'>,
+  width: number,
+  format: ImageFormat = 'avif',
+): string {
+  return url(imageUrl(image, width, format));
+}
+
+/** 指定形式の srcset 候補。 */
+export function imageSrcSet(image: GalleryImage, format: ImageFormat = 'avif'): string {
+  return image.widths.map((w) => `${mediaUrl(image, w, format)} ${w}w`).join(', ');
 }
 
 /** 一覧用のサムネイル。最小幅を使う。 */
-export function thumbUrl(image: GalleryImage): string {
-  return imageUrl(image, Math.min(...image.widths));
+export function thumbUrl(image: GalleryImage, format: ImageFormat = 'avif'): string {
+  return imageUrl(image, Math.min(...image.widths), format);
 }
 
 /** 記事の表紙画像を決める。cover 指定がなければ先頭の画像。 */

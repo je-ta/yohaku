@@ -4,6 +4,9 @@
 // 元データは Lorem Picsum から借りている。picsum は毎回 302 で別ドメインへ
 // 飛ばすため、そのまま <img src> にすると 1 枚あたり往復が 2 回になる。
 // ここでローカルに複製しておけば、配信は同一オリジン・1 リクエストで済む。
+//
+// 出力は AVIF と WebP。AVIF は WebP より 4〜5 割小さく、対応ブラウザも
+// 主要どころは揃っているが、<picture> で WebP をフォールバックに残す。
 
 import { readFile, writeFile, mkdir, stat } from 'node:fs/promises';
 import { readdirSync } from 'node:fs';
@@ -14,10 +17,15 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const OUT = join(ROOT, 'public', 'media');
 const MANIFEST = join(ROOT, 'src', 'content', 'image-manifest.json');
 const WIDTHS = [320, 640, 860, 1280];
-const QUALITY = 66;
+
+/** AVIF は effort 2 で十分小さく、生成も速い（effort 6 と 1% 差で 20 倍遅い）。 */
+const AVIF = { quality: 40, effort: 2 };
+const WEBP = { quality: 66, effort: 6 };
+
 /** 取得元の最大幅。ここから各サイズへ縮小する。 */
 const SOURCE_WIDTH = 1280;
-const CONCURRENCY = 4;
+/** エンコードは CPU 依存なので、コア数の半分ほどまで並列化する。 */
+const CONCURRENCY = Math.max(2, Math.min(8, Math.floor((process.env.NUM_CPUS ?? 4) / 2)));
 
 /** 記事ファイルを再帰的に集める。 */
 function findPosts(dir) {
@@ -50,15 +58,15 @@ async function exists(path) {
   }
 }
 
-/** 1 枚ぶんの画像を取得して各サイズを書き出す。 */
+/** 1 枚ぶんの画像を取得して各サイズ・各形式を書き出す。 */
 async function buildOne(photoId, { w, h }, { force }) {
   const dir = join(OUT, photoId);
   await mkdir(dir, { recursive: true });
 
-  const targets = WIDTHS.map((width) => ({
-    width,
-    path: join(dir, `${width}.webp`),
-  }));
+  const targets = WIDTHS.flatMap((width) => [
+    { width, path: join(dir, `${width}.avif`) },
+    { width, path: join(dir, `${width}.webp`) },
+  ]);
 
   if (!force && (await Promise.all(targets.map((t) => exists(t.path)))).every(Boolean)) {
     return { photoId, skipped: true };
@@ -70,11 +78,20 @@ async function buildOne(photoId, { w, h }, { force }) {
   if (!response.ok) throw new Error(`${photoId}: ${response.status} ${url}`);
   const source = Buffer.from(await response.arrayBuffer());
 
+  /** 元画像 1 枚から、幅ぶんだけ縮小したバッファを作る（縮小は 1 回で済ませる）。 */
+  const resized = new Map();
+  for (const width of WIDTHS) {
+    resized.set(width, await sharp(source).resize({ width }).toBuffer());
+  }
+
   const bytes = {};
-  for (const target of targets) {
-    const resized = sharp(source).resize({ width: target.width, withoutEnlargement: false });
-    await resized.webp({ quality: QUALITY, effort: 6 }).toFile(target.path);
-    bytes[target.width] = (await stat(target.path)).size;
+  for (const width of WIDTHS) {
+    const base = resized.get(width);
+    const avifPath = join(dir, `${width}.avif`);
+    const webpPath = join(dir, `${width}.webp`);
+    await sharp(base).avif(AVIF).toFile(avifPath);
+    await sharp(base).webp(WEBP).toFile(webpPath);
+    bytes[width] = { avif: (await stat(avifPath)).size, webp: (await stat(webpPath)).size };
   }
 
   return { photoId, bytes };
@@ -87,12 +104,13 @@ for (const file of findPosts(postsDir)) {
   for (const [id, size] of extractPhotos(await readFile(file, 'utf8'))) photos.set(id, size);
 }
 
-console.log(`${photos.size} 枚を処理します (force=${force})`);
+console.log(`${photos.size} 枚を処理します (force=${force}, concurrency=${CONCURRENCY})`);
 await mkdir(OUT, { recursive: true });
 
 const queue = [...photos.entries()];
 const manifest = {};
-let total = 0;
+let avifTotal = 0;
+let webpTotal = 0;
 let index = 0;
 
 async function worker() {
@@ -101,7 +119,10 @@ async function worker() {
     try {
       const result = await buildOne(photoId, size, { force });
       if (!result.skipped) {
-        total += Object.values(result.bytes).reduce((a, b) => a + b, 0);
+        for (const sizes of Object.values(result.bytes)) {
+          avifTotal += sizes.avif;
+          webpTotal += sizes.webp;
+        }
         index += 1;
         console.log(`  ✓ ${photoId} (${index}/${photos.size})`);
       }
@@ -117,8 +138,9 @@ await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 
 await writeFile(
   MANIFEST,
-  JSON.stringify({ widths: WIDTHS, photos: manifest }, null, 2) + '\n',
+  JSON.stringify({ widths: WIDTHS, formats: ['avif', 'webp'], photos: manifest }, null, 2) + '\n',
   'utf8',
 );
 
-console.log(`完了: ${(total / 1024 / 1024).toFixed(2)} MB を書き出しました`);
+const mb = (n) => (n / 1024 / 1024).toFixed(2);
+console.log(`完了: avif ${mb(avifTotal)}MB / webp ${mb(webpTotal)}MB（合計 ${mb(avifTotal + webpTotal)}MB）`);

@@ -18,7 +18,7 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort();
 <BaseLayout
   title="Image Gallery Samples — 写真で見るサンプルギャラリー"
   description="複数画像のレイアウトと読み込みを確認するためのサンプルギャラリー。写真は Lorem Picsum / Unsplash の提供です。"
-  image={featured ? mediaUrl(featured.data.images[0], 1280) : undefined}
+  image={featured ? mediaUrl(featured.data.images[0], 1280, 'webp') : undefined}
 >
   <section class="hero wrap">
     <p class="eyebrow">Sample Gallery</p>

@@ -14,21 +14,28 @@ interface Props {
 const { image, index, total, priority = false } = Astro.props;
 const num = String(index).padStart(2, '0');
 const paddedTotal = String(total).padStart(2, '0');
+
+/** 記事本文の最大幅は 860px。それ以上は広げない。 */
+const SIZES = '(min-width: 1000px) 860px, (min-width: 680px) 90vw, 100vw';
 ---
 
 <figure class="gallery-item" id={`photo-${image.id}`}>
   <div class="gallery-item__frame" style={`--ph: ${image.color}; aspect-ratio: ${aspectRatio(image)}`}>
-    <img
-      src={mediaUrl(image, 1280)}
-      srcset={imageSrcSet(image)}
-      sizes="(min-width: 1000px) 860px, (min-width: 680px) 90vw, 100vw"
-      width="1280"
-      height={Math.round((1280 * image.h) / image.w)}
-      alt={image.alt}
-      loading={priority ? 'eager' : 'lazy'}
-      fetchpriority={priority ? 'high' : 'auto'}
-      decoding="async"
-    />
+    <picture>
+      <source type="image/avif" srcset={imageSrcSet(image, 'avif')} sizes={SIZES} />
+      <source type="image/webp" srcset={imageSrcSet(image, 'webp')} sizes={SIZES} />
+      <img
+        src={mediaUrl(image, 1280, 'webp')}
+        srcset={imageSrcSet(image, 'webp')}
+        sizes={SIZES}
+        width="1280"
+        height={Math.round((1280 * image.h) / image.w)}
+        alt={image.alt}
+        loading={priority ? 'eager' : 'lazy'}
+        fetchpriority={priority ? 'high' : 'auto'}
+        decoding="async"
+      />
+    </picture>
   </div>
   <figcaption class="gallery-item__caption">
     <span class="gallery-item__index" aria-hidden="true">{num}<span class="gallery-item__total">/{paddedTotal}</span></span>

@@ -27,6 +27,11 @@ const {
 
 const photo = coverImage(images, cover);
 const href = postUrl(id);
+
+/** 一覧カードの表示幅。featured は全幅、それ以外は 3 カラム想定。 */
+const SIZES = featured
+  ? '(min-width: 900px) 760px, 100vw'
+  : '(min-width: 900px) 380px, (min-width: 560px) 45vw, 90vw';
 ---
 
 <article class:list={['post-card', { 'post-card--featured': featured }]}>
@@ -35,21 +40,25 @@ const href = postUrl(id);
       class="post-card__figure"
       style={`--ph: ${photo.color}; aspect-ratio: ${featured ? '16 / 9' : aspectRatio(photo)}`}
     >
-      <img
-        src={mediaUrl(photo, featured ? 640 : Math.min(...photo.widths))}
-        srcset={imageSrcSet(photo)}
-        sizes={featured ? '(min-width: 900px) 760px, 100vw' : '(min-width: 900px) 380px, (min-width: 560px) 45vw, 90vw'}
-        width={featured ? 640 : Math.min(...photo.widths)}
-        height={
-          featured
-            ? Math.round((640 * photo.h) / photo.w)
-            : Math.round((Math.min(...photo.widths) * photo.h) / photo.w)
-        }
-        alt={photo.alt}
-        loading={featured ? 'eager' : 'lazy'}
-        fetchpriority={featured ? 'high' : 'auto'}
-        decoding="async"
-      />
+      <picture>
+        <source type="image/avif" srcset={imageSrcSet(photo, 'avif')} sizes={SIZES} />
+        <source type="image/webp" srcset={imageSrcSet(photo, 'webp')} sizes={SIZES} />
+        <img
+          src={mediaUrl(photo, featured ? 640 : Math.min(...photo.widths), 'webp')}
+          srcset={imageSrcSet(photo, 'webp')}
+          sizes={SIZES}
+          width={featured ? 640 : Math.min(...photo.widths)}
+          height={
+            featured
+              ? Math.round((640 * photo.h) / photo.w)
+              : Math.round((Math.min(...photo.widths) * photo.h) / photo.w)
+          }
+          alt={photo.alt}
+          loading={featured ? 'eager' : 'lazy'}
+          fetchpriority={featured ? 'high' : 'auto'}
+          decoding="async"
+        />
+      </picture>
       <span class="post-card__count" aria-hidden="true">
         {images.length}
         <span class="visually-hidden">枚の写真</span>
