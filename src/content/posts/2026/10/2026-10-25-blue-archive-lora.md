@@ -1,5 +1,5 @@
 ---
-title: 【MOSS Image】Blue ArchiveキャラLoRAで10人を誘惑ポーズで生成
+title: 【MOSS Image】Blue ArchiveキャラLoRAで10人を生成
 date: 2026-10-25
 category: still-life
 tags:
