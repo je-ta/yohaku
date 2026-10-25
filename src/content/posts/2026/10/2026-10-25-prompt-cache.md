@@ -1,5 +1,5 @@
 ---
-title: プロンプトのベクトルを使い回すと10枚が5分で出る
+title: MOSS-Imageのプロンプトキャッシュで10枚を5分で生成する
 date: 2026-10-25
 category: still-life
 tags:
@@ -7,7 +7,7 @@ tags:
   - image-generation
   - comfyui
   - benchmark
-description: MOSS-Image で同じプロンプトのまま seed を振ると、2枚目以降が18秒になる。10枚生成の実測ログ。
+description: MOSS-Imageで同一プロンプトのままseedを振ると2枚目以降が18秒。ComfyUIのconditioningキャッシュで10枚323.6秒の実測ログ。
 cover: 4b96b5aa693a50d1
 gallery: false
 images:

@@ -1,5 +1,5 @@
 ---
-title: RTX 2080 SUPER 8GBで画像生成はどこまで行けるか
+title: RTX 2080 SUPER 8GBでMOSS-ImageとZ-Image Turboを比較した
 date: 2026-10-25
 category: still-life
 tags:
@@ -7,7 +7,7 @@ tags:
   - image-generation
   - rtx2080
   - benchmark
-description: RTX 2080 SUPER 8GBで、MOSS-Image と Z-Image Turbo を実測。4step蒸留で96秒、最新モデルで20秒。数字と絵で比べた記録。
+description: RTX 2080 SUPER 8GBでMOSS-ImageとZ-Image Turboを実測比較。MOSSは4step蒸留で96秒、Z-Imageは20秒。生成時間と画質を画像付きで比較した。
 cover: 2a4e058b0b895573
 gallery: false
 images:

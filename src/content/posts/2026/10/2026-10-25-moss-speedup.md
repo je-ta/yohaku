@@ -1,5 +1,5 @@
 ---
-title: MOSS-Image を 98秒から 18秒にした話
+title: RTX 2080 SUPERでMOSS-Imageを98秒から18秒に高速化した方法
 date: 2026-10-25
 category: still-life
 tags:
@@ -7,7 +7,7 @@ tags:
   - image-generation
   - rtx2080
   - benchmark
-description: RTX 2080 SUPER 8GB で MOSS-Image の生成時間を実測しながら削った記録。効いたのはキャッシュだった。
+description: RTX 2080 SUPER 8GBでMOSS-Imageを98秒から18秒へ高速化。ボトルネックはテキストエンコーダの67秒で、conditioningキャッシュが最も効いた。
 cover: faa076738339e64a
 gallery: false
 images:
