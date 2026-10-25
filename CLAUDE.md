@@ -22,9 +22,12 @@ bun run add-photos ~/Pictures/trip/*.jpg
 
 これが以下をやる:
 
+- `src/content/posts/_assets/<id>.<ext>` に**原本をコピー**（これがリポジトリに入る）
 - `public/media/<id>/` に AVIF と WebP を 320/640/860/1280 の4サイズで生成
 - 平均色（プレースホルダ用）を計算
-- 貼り付け可能な `images:` ブロックを標準出力に出す（`/tmp/yohaku-images.txt` にも保存）
+- 貼り付け可能な `images:` ブロックを標準出力に出す
+
+`public/media/` は git 管理外なので、原本が無いと CI でビルドしても画像が作られない。`add-photos` が原本を残すのはそのため。
 
 出力されたブロックを記事の frontmatter に貼るだけ。
 
@@ -103,8 +106,8 @@ bun run check    # frontmatter の検証（スキーマ違反はここで落ち�
 **`images.N.photoId: Invalid input`**
 `photoId` の形式違い。数値（picsum 由来）か 16桁 hex（`add-photos` 由来）のみ。
 
-**写真が表示されない**
-`bun run images` か `bun run add-photos` を実行していない。`public/media/` は git 管理外なので、ビルド時に必ず生成される（`bun run build` の前段で走る）。
+**写真が表示されない（本番だけ404）**
+`src/content/posts/_assets/` に原本が入っているか確認する。`public/media/` は git 管理外なので、原本が無いと CI で生成できない。`bun run assets` で再生成できる。
 
 **写真を差し替えたのに古いのが出る**
 `v` を 1 上げる。URL のキャッシュキーになっている。
@@ -132,7 +135,8 @@ src/
 
 scripts/
 ├── fetch-images.mjs   # picsum 由来の写真を生成（既存記事用）
-├── add-photos.mjs     # 手持ちの写真を取り込む
+├── render-assets.mjs  # _assets/ の原本から配信用画像を生成
+├── add-photos.mjs     # 手持ちの写真を取り込む（原本も保存）
 └── new-post.mjs       # 記事の雛形
 ```
 

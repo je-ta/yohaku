@@ -10,13 +10,14 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "node scripts/fetch-images.mjs && astro build",
+    "build": "node scripts/fetch-images.mjs && node scripts/render-assets.mjs && astro build",
     "preview": "astro preview",
     "check": "astro check",
     "sync": "astro sync",
     "new-post": "node scripts/new-post.mjs",
     "images": "node scripts/fetch-images.mjs",
-    "add-photos": "node scripts/add-photos.mjs"
+    "add-photos": "node scripts/add-photos.mjs",
+    "assets": "node scripts/render-assets.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

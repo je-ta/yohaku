@@ -7,7 +7,7 @@
 // 生成物は public/media/<id>/<width>.{avif,webp}。標準出力に貼り付け可能な
 // frontmatter の images: ブロックを出すので、記事の frontmatter にそのまま入れる。
 
-import { mkdir, stat, writeFile } from 'node:fs/promises';
+import { mkdir, stat, writeFile, copyFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { basename, extname, join } from 'node:path';
@@ -15,6 +15,8 @@ import sharp from 'sharp';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const OUT = join(ROOT, 'public', 'media');
+/** 原本の置き場。public/media は git 管理外なので、再生成用にここへ残す。 */
+const ASSETS = join(ROOT, 'src', 'content', 'posts', '_assets');
 const WIDTHS = [320, 640, 860, 1280];
 const AVIF = { quality: 40, effort: 2 };
 const WEBP = { quality: 66, effort: 6 };
@@ -56,6 +58,12 @@ for (const file of files) {
     const id = photoId(source);
     const dir = join(OUT, id);
     await mkdir(dir, { recursive: true });
+
+    // 原本を残す。CI は public/media を git から受け取れないので、
+    // ここから render-assets.mjs が同じ画像を作り直す。
+    await mkdir(ASSETS, { recursive: true });
+    const ext = extname(file).toLowerCase() || '.jpg';
+    await copyFile(file, join(ASSETS, `${id}${ext}`));
 
     const meta = await sharp(source).metadata();
     if (!meta.width || !meta.height) throw new Error('画像サイズが読めません');
