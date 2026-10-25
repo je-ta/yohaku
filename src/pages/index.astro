@@ -16,15 +16,15 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort();
 ---
 
 <BaseLayout
-  title="Image Gallery Samples — 写真で見るサンプルギャラリー"
-  description="複数画像のレイアウトと読み込みを確認するためのサンプルギャラリー。写真は Lorem Picsum / Unsplash の提供です。"
+  title="余白 — 写真を、ゆっくり見る。"
+  description="日々の光景を写真と文章で綴る。写真は Lorem Picsum / Unsplash の提供です。"
   image={featured ? mediaUrl(featured.data.images[0], 1280, 'webp') : undefined}
 >
   <section class="hero wrap">
-    <p class="eyebrow">Sample Gallery</p>
+    <p class="eyebrow">Photographs & Notes</p>
     <h1 class="hero__title">写真を、ゆっくり見る。</h1>
     <p class="hero__lead">
-      複数画像の並び方と読み込みを確かめるためのサンプル集。{posts.length} 本の記事に{totalPhotos} 枚の写真を収めています。
+      日々の光景を、静かに切り取る。{posts.length} 本の記事に{totalPhotos} 枚の写真を収めています。
     </p>
     <ul class="hero__stats">
       <li><strong>{posts.length}</strong><span>記事</span></li>

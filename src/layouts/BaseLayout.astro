@@ -25,7 +25,7 @@ const {
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 const ogImage = image ? new URL(image, Astro.site ?? Astro.url).href : undefined;
-const siteName = 'Image Gallery Samples';
+const siteName = '余白';
 const year = new Date().getFullYear();
 
 const navItems = [
@@ -85,8 +85,8 @@ const isCurrent = (href: string) =>
       <div class="wrap site-header__inner">
         <a class="brand" href={url('/')}>
           <span class="brand__mark" aria-hidden="true"></span>
-          <span>Image Gallery</span>
-          <span class="brand__sub">Samples</span>
+          <span>余白</span>
+          <span class="brand__sub">Yohaku</span>
         </a>
         <nav class="site-nav" aria-label="メインナビゲーション">
           {

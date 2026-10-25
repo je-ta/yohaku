@@ -1,4 +1,4 @@
-# Image Gallery Samples
+# 余白 / Yohaku
 
 写真を主役にした、静的なフォトギャラリーのサンプルサイト。Astro で組み立てていて、ビルド後は完全な静的ファイル（JS ゼロ・CSS 約 11KB）になる。
 
