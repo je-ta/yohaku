@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GalleryImage from '../../components/GalleryImage.astro';
-import { coverImage, formatDate, isoDate, mediaUrl, postUrl, tagLabel, url } from '../../lib/gallery';
+import { clampWidth, coverImage, formatDate, isoDate, mediaUrl, postUrl, tagLabel, url } from '../../lib/gallery';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -38,7 +38,7 @@ const heroPreload = new URL(mediaUrl(heroImage, 860, 'avif'), Astro.site ?? Astr
 <BaseLayout
   title={pageTitle}
   description={description || `${title}のサンプルギャラリー。`}
-  image={mediaUrl(coverPhoto, 1280, 'webp')}
+  image={mediaUrl(coverPhoto, clampWidth(coverPhoto, 1280), 'webp')}
   type="article"
   preloadImage={heroPreload}
 >

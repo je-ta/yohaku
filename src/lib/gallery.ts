@@ -61,6 +61,15 @@ export function thumbUrl(image: GalleryImage, format: ImageFormat = 'avif'): str
   return imageUrl(image, Math.min(...image.widths), format);
 }
 
+/**
+ * 生成済みの幅に丸める。元画像が 1024px のように 1280 より小さいと
+ * 1280 は書き出されないので、`src` / OGP が 404 になる。
+ */
+export function clampWidth(image: Pick<GalleryImage, 'widths'>, width: number): number {
+  if (image.widths.includes(width)) return width;
+  return image.widths.reduce((best, w) => (Math.abs(w - width) < Math.abs(best - width) ? w : best));
+}
+
 /** 記事の表紙画像を決める。cover 指定がなければ先頭の画像。 */
 export function coverImage<T extends GalleryImage>(images: T[], cover?: string | null): T {
   if (!cover) return images[0]!;

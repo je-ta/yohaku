@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
-import { mediaUrl, url } from '../lib/gallery';
+import { clampWidth, mediaUrl, url } from '../lib/gallery';
 
 const posts = (await getCollection('posts')).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -18,7 +18,7 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort();
 <BaseLayout
   title="余白 — 写真を、ゆっくり見る。"
   description="日々の光景を写真と文章で綴る。写真は Lorem Picsum / Unsplash の提供です。"
-  image={featured ? mediaUrl(featured.data.images[0], 1280, 'webp') : undefined}
+  image={featured ? mediaUrl(featured.data.images[0], clampWidth(featured.data.images[0], 1280), 'webp') : undefined}
 >
   <section class="hero wrap">
     <p class="eyebrow">Photographs & Notes</p>

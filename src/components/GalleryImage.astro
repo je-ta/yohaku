@@ -1,5 +1,5 @@
 ---
-import { aspectRatio, imageSrcSet, mediaUrl } from '../lib/gallery';
+import { aspectRatio, clampWidth, imageSrcSet, mediaUrl } from '../lib/gallery';
 import type { GalleryImage } from '../lib/gallery';
 
 interface Props {
@@ -17,6 +17,9 @@ const paddedTotal = String(total).padStart(2, '0');
 
 /** 記事本文の最大幅は 860px。それ以上は広げない。 */
 const SIZES = '(min-width: 1000px) 860px, (min-width: 680px) 90vw, 100vw';
+
+/** `src` のフォールバックは実在する最大幅に合わせる。 */
+const fallbackWidth = clampWidth(image, 1280);
 ---
 
 <figure class="gallery-item" id={`photo-${image.id}`}>
@@ -25,11 +28,11 @@ const SIZES = '(min-width: 1000px) 860px, (min-width: 680px) 90vw, 100vw';
       <source type="image/avif" srcset={imageSrcSet(image, 'avif')} sizes={SIZES} />
       <source type="image/webp" srcset={imageSrcSet(image, 'webp')} sizes={SIZES} />
       <img
-        src={mediaUrl(image, 1280, 'webp')}
+        src={mediaUrl(image, fallbackWidth, 'webp')}
         srcset={imageSrcSet(image, 'webp')}
         sizes={SIZES}
-        width="1280"
-        height={Math.round((1280 * image.h) / image.w)}
+        width={fallbackWidth}
+        height={Math.round((fallbackWidth * image.h) / image.w)}
         alt={image.alt}
         loading={priority ? 'eager' : 'lazy'}
         fetchpriority={priority ? 'high' : 'auto'}
