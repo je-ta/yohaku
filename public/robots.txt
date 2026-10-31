@@ -32,4 +32,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://yohaku.je-ta-gallery.workers.dev/sitemap-index.xml
+Sitemap: https://yohaku.je-ta-gallery.workers.dev/sitemap-0.xml

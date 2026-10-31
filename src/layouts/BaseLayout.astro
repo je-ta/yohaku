@@ -94,7 +94,7 @@ const isCurrent = (href: string) =>
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="alternate" type="application/rss+xml" title={siteName} href={url('/rss.xml')} />
-    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    <link rel="sitemap" href={url('/sitemap-0.xml')} />
     {/* Google Search Console の所有権確認。public/ の HTML ファイルと二段構え。 */}
     <meta name="google-site-verification" content="google258229f4ca84e88f" />
     {!noindex && <script type="application/ld+json" set:html={jsonLd} />}
