@@ -162,6 +162,13 @@ bun run db:schema                    # 本番 D1 にスキーマ
 wrangler secret put ADMIN_PASS       # 管理画面のパスワード
 ```
 
+## 検索エンジン
+
+- IndexNow のキーは `public/d8ebbbd55842a114185853cab49e7fd9.txt`。ファイル名と本文がキーになり、静的ファイルとして公開される。スクリプトは `public/` の 32 桁 hex の `.txt` を 1 つだけ読み込む。
+- CI はデプロイのたびに公開キーを確認し、`dist/sitemap-0.xml` の全 URL を IndexNow に通知する。通知が失敗してもデプロイ自体は失敗扱いにしない。
+- `bun run indexnow -- --dry-run` で送信内容を確認できる（先に `bun run build` が必要）。ドライランでは通信しない。
+- Bing・Yandex などが対象。**Google は IndexNow に対応していない**ので、Google への登録・確認には Search Console を使う。
+
 ## 技術的な前提
 
 - **Astro 7** / Node 22.23.4 以上

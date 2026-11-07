@@ -46,3 +46,9 @@ jobs:
             ADMIN_PASS
         env:
           ADMIN_PASS: ${{ secrets.ADMIN_PASS }}
+
+      - name: Notify IndexNow
+        run: bun run indexnow
+        continue-on-error: true
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://yohaku.je-ta-gallery.workers.dev' }}

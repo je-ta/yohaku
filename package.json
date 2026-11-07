@@ -18,6 +18,7 @@
     "images": "node scripts/fetch-images.mjs",
     "add-photos": "node scripts/add-photos.mjs",
     "assets": "node scripts/render-assets.mjs",
+    "indexnow": "node scripts/indexnow.mjs",
     "worker": "wrangler dev",
     "db:schema": "wrangler d1 execute yohaku-analytics --remote --file=worker/schema.sql",
     "db:local": "wrangler d1 execute yohaku-analytics --local --file=worker/schema.sql",
